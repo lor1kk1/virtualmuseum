@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressionist Art - Virtual Museum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #1a1a1a;
+        }
+
+        /* Header Styles */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 26, 26, 0.95);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 0;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+        }
+
+        .gallery-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gallery-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #c9a66b;
+            background: transparent;
+            color: #1a1a1a;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            will-change: transform;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #fff;
+            will-change: transform;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            will-change: transform;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            will-change: transform, opacity;
+        }
+
+        .gallery-item:hover .gallery-overlay h3 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-overlay p {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            will-change: transform, opacity;
+        }
+
+        .gallery-item:hover .gallery-overlay p {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .artwork-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            will-change: transform, opacity;
+        }
+
+        .gallery-item:hover .artwork-meta {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        .zoom-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.8);
+            will-change: transform, opacity;
+        }
+
+        .gallery-item:hover .zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .lightbox-img-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-info {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+        }
+
+        .lightbox-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .lightbox-info p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .lightbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: #d4af37;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-meta i {
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        .zoom-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-content {
+                flex-direction: column;
+                max-height: 90vh;
+            }
+
+            .lightbox-img-container {
+                max-height: 50vh;
+            }
+
+            .lightbox-info {
+                max-height: 40vh;
+            }
+        }
+
+        /* Footer Styles */
+        .renaissance-footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: normal;
+        }
+
+        .footer-section p {
+            color: #fff;
+            line-height: 1.5;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: #2a2a2a;
+            border: none;
+            padding: 0.8rem;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: 600px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .slide-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #c9a66b;
+            transform: scale(1.2);
+        }
+
+        /* Artists Section */
+        .artists-section {
+            padding: 4rem 2rem;
+            background-color: #fff;
+        }
+
+        .artists-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .artist-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .artist-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 1.5rem;
+        }
+
+        .artist-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: #c9a66b;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="bckg 4.jpg" alt="Impressionist Art" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Arti Impressionist</h1>
+            <p>Zbuloni lëvizjen revolucionare që kapi efektet kalimtare të dritës dhe ngjyrës, duke transformuar mënyrën se si ne e shohim dhe përjetojmë artin.</p>
+        </div>
+    </section>
+
+    <!-- Slider Section -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <img src="impression_sunrise.jpg" alt="Impression, Sunrise">
+                <div class="slide-content">
+                    <h2>Impression, Sunrise</h2>
+                    <p>Vepra novatore e Claude Monet nga viti 1872 që i dha emrin lëvizjes impresioniste, duke pushtuar portin e Le Havre në agim.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="water_lilies.jpg" alt="Water Lilies">
+                <div class="slide-content">
+                    <h2>Water Lilies</h2>
+                    <p>Seria e famshëm e Monet nga viti 1916, duke eksploruar ndërveprimin e dritës dhe ujit në kopshtin e tij në Giverny.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="starrynight.jpg" alt="Starry Night">
+                <div class="slide-content">
+                    <h2>Starry Night</h2>
+                    <p>Kryevepra e Vincent van Gogh nga viti 1889, që paraqet modele rrotulluese të trupave qiellorë mbi një fshat të fjetur.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <div class="gallery-section">
+        <div class="gallery-header">
+            <h2>Veprat e Artit Impressionist</h2>
+            <p>Zbuloni veprat revolucionare të artit që kapi efektet kalimtare të dritës dhe ngjyrës, duke transformuar mënyrën se si ne e shohim dhe përjetojmë artin.</p>
+        </div>
+
+        <div class="gallery-controls">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Te gjitha</button>
+                <button class="filter-btn" data-filter="landscape">Peisazhe</button>
+                <button class="filter-btn" data-filter="portrait">Portret</button>
+                <button class="filter-btn" data-filter="still-life">Natyrë e qetë</button>
+                <button class="filter-btn" data-filter="urban">Skena Urbane</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- Artwork 1 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="impression_sunrise.jpg" alt="Impression, Sunrise" loading="lazy">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Impression, Sunrise</h3>
+                    <p>Claude Monet</p>
+                    <div class="artwork-meta">
+                        <span>1872</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 2 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="dance_moulin.jpg" alt="Dance at Le Moulin de la Galette">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Dance at Le Moulin de la Galette</h3>
+                    <p>Pierre-Auguste Renoir</p>
+                    <div class="artwork-meta">
+                        <span>1876</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 3 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="water_lilies.jpg" alt="Water Lilies">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Water Lilies</h3>
+                    <p>Claude Monet</p>
+                    <div class="artwork-meta">
+                        <span>1916</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 4 -->
+            <div class="gallery-item" data-category="urban">
+                <img src="paris_street.jpg" alt="Paris Street; Rainy Day">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Paris Street; Rainy Day</h3>
+                    <p>Gustave Caillebotte</p>
+                    <div class="artwork-meta">
+                        <span>1877</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 5 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="luncheon_grass.jpg" alt="Luncheon on the Grass">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Luncheon on the Grass</h3>
+                    <p>Édouard Manet</p>
+                    <div class="artwork-meta">
+                        <span>1863</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 6 -->
+            <div class="gallery-item" data-category="still-life">
+                <img src="sunflowers.jpg" alt="Sunflowers">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Sunflowers</h3>
+                    <p>Vincent van Gogh</p>
+                    <div class="artwork-meta">
+                        <span>1888</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 7 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="starrynight.jpg" alt="Starry Night">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Starry Night</h3>
+                    <p>Vincent van Gogh</p>
+                    <div class="artwork-meta">
+                        <span>1889</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 8 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="girl_pearl.jpg" alt="Girl with a Pearl Earring">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Girl with a Pearl Earring</h3>
+                    <p>Johannes Vermeer</p>
+                    <div class="artwork-meta">
+                        <span>1665</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 9 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="wheatfield_crows.jpg" alt="Wheatfield with Crows">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Wheatfield with Crows</h3>
+                    <p>Vincent van Gogh</p>
+                    <div class="artwork-meta">
+                        <span>1890</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 10 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="bal_du_moulin.jpg" alt="Bal du moulin de la Galette">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Bal du moulin de la Galette</h3>
+                    <p>Pierre-Auguste Renoir</p>
+                    <div class="artwork-meta">
+                        <span>1876</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 11 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="bridge_argenteuil.jpg" alt="The Bridge at Argenteuil">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>The Bridge at Argenteuil</h3>
+                    <p>Claude Monet</p>
+                    <div class="artwork-meta">
+                        <span>1874</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 12 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="luncheon_boat.jpg" alt="Luncheon of the Boating Party">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Luncheon of the Boating Party</h3>
+                    <p>Pierre-Auguste Renoir</p>
+                    <div class="artwork-meta">
+                        <span>1881</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 13 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="haystacks.jpg" alt="Haystacks">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Haystacks</h3>
+                    <p>Claude Monet</p>
+                    <div class="artwork-meta">
+                        <span>1890</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 14 -->
+            <div class="gallery-item" data-category="portrait">
+                <img src="self_portrait.jpg" alt="Self-Portrait with Bandaged Ear">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Self-Portrait with Bandaged Ear</h3>
+                    <p>Vincent van Gogh</p>
+                    <div class="artwork-meta">
+                        <span>1889</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 15 -->
+            <div class="gallery-item" data-category="landscape">
+                <img src="rouen_cathedral.jpg" alt="Rouen Cathedral">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="gallery-overlay">
+                    <h3>Rouen Cathedral</h3>
+                    <p>Claude Monet</p>
+                    <div class="artwork-meta">
+                        <span>1894</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Artists Section -->
+    <section class="artists-section">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <h2>Artistet e Artit Impressionist</h2>
+            <div class="divider-line"></div>
+        </div>
+        <div class="artists-container">
+            <!-- Artist 1 -->
+            <div class="artist-card">
+                <img src="claude_monet.jpg" alt="Claude Monet">
+                <div class="artist-info">
+                    <h3>Claude Monet</h3>
+                    <p>1840-1926</p>
+                    <p>Pionier i impresionizmit, i njohur për veprat e tij që kapin efektet e dritës dhe atmosferës. Krijoi seri të famshme si "Water Lilies" dhe "Rouen Cathedral".</p>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card">
+                <img src="pierre_auguste_renoir.jpg" alt="Pierre-Auguste Renoir">
+                <div class="artist-info">
+                    <h3>Pierre-Auguste Renoir</h3>
+                    <p>1841-1919</p>
+                    <p>I njohur për portretet e tij dhe skenat e jetës së përditshme. Veprat e tij karakterizohen nga ngjyrat e gjalla dhe përdorimi i dritës. Krijoi vepra të njohura si "Dance at Le Moulin de la Galette".</p>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card">
+                <img src="edgar_degas.jpg" alt="Edgar Degas">
+                <div class="artist-info">
+                    <h3>Edgar Degas</h3>
+                    <p>1834-1917</p>
+                    <p>I njohur për veprat e tij që përshkruajnë balerinat dhe skenat e teatrit. Përdori perspektiva të pazakonta dhe kompozime inovative. Krijoi vepra të njohura si "The Dance Class".</p>
+                </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="artist-card">
+                <img src="camille_pissarro.jpg" alt="Camille Pissarro">
+                <div class="artist-info">
+                    <h3>Camille Pissarro</h3>
+                    <p>1830-1903</p>
+                    <p>Një nga themeluesit e impresionizmit, i njohur për peizazhet e tij dhe skenat urbane. Ndikoi shumë artistët e tjerë dhe zhvilloi stilin e tij gjatë gjithë karrierës së tij.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn"><i class="fas fa-times"></i></span>
+            <div class="lightbox-img-container">
+                <img src="" alt="" class="lightbox-img">
+                <button class="zoom-btn"><i class="fas fa-search-plus"></i></button>
+            </div>
+            <div class="lightbox-info">
+                <h3></h3>
+                <p></p>
+                <div class="lightbox-meta">
+                    <span><i class="fas fa-palette"></i> <span class="artist"></span></span>
+                    <span><i class="fas fa-calendar"></i> <span class="year"></span></span>
+                    <span><i class="fas fa-paint-brush"></i> <span class="medium"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="renaissance-footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <h3>Rreth Nesh</h3>
+                    <p>Muzeu Virtual është një platformë inovative që sjell artin në shtëpinë tuaj. Eksploroni koleksionet tona të pasura dhe përjetoni artin në një mënyrë të re dhe interaktive.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="web.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="collections.html">Collections</a>
+                        <a href="exhibitions.html">Exhibitions</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <form class="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Virtual Museum. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Slider Functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.querySelector('.slider-btn.prev');
+        const nextBtn = document.querySelector('.slider-btn.next');
+        const dots = document.querySelectorAll('.dot');
+
+        let currentSlide = 0;
+        const slideCount = slides.length;
+        let slideInterval;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            prevSlide();
+            startAutoSlide();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            nextSlide();
+            startAutoSlide();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = index;
+                updateSlider();
+                startAutoSlide();
+            });
+        });
+
+        // Initialize slider
+        startAutoSlide();
+
+        // Gallery Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const filter = button.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Artwork Data
+        const artworkData = {
+            'impression_sunrise.jpg': {
+                title: 'Impression, Sunrise',
+                desc: 'Vepra që i dha emrin lëvizjes së impresionizmit, kjo pikturë e Monet përshkruan portin e Le Havre në mëngjes. Vepra është e njohur për përdorimin e saj të ngjyrave të gjalla dhe për efektin e saj të dritës.',
+                artist: 'Claude Monet',
+                year: '1872',
+                medium: 'Oil on Canvas'
+            },
+            'dance_moulin.jpg': {
+                title: 'Dance at Le Moulin de la Galette',
+                desc: 'Një nga veprat më të njohura të Renoir, kjo pikturë përshkruan një skenë të jetës së përditshme në Paris. Vepra është e njohur për përdorimin e saj të dritës dhe ngjyrave, si dhe për atmosferën e saj të gëzueshme.',
+                artist: 'Pierre-Auguste Renoir',
+                year: '1876',
+                medium: 'Oil on Canvas'
+            },
+            'water_lilies.jpg': {
+                title: 'Water Lilies',
+                desc: 'Një seri veprash nga Monet që përshkruajnë liqenet e luleve të ujit në kopshtin e tij. Veprat janë të njohura për përdorimin e tyre të dritës dhe ngjyrave, si dhe për efektin e tyre të qetë dhe meditativ.',
+                artist: 'Claude Monet',
+                year: '1916',
+                medium: 'Oil on Canvas'
+            },
+            'paris_street.jpg': {
+                title: 'Paris Street; Rainy Day',
+                desc: 'Një vepër e shquar e Caillebotte-t që kap atmosferën e një rruge parisiane në një ditë me shi. Perspektiva dhe kompozimi janë të shquar për kohën.',
+                artist: 'Gustave Caillebotte',
+                year: '1877',
+                medium: 'Oil on Canvas'
+            },
+            'luncheon_grass.jpg': {
+                title: 'Luncheon on the Grass',
+                desc: 'Një vepër revolucionare nga Manet që shkaktoi skandal në kohën e saj. Vepra përshkruan një grua të zhveshur në një piknik me dy burra të veshur. Vepra është e njohur për përdorimin e saj të dritës dhe për sfidimin e saj të konvencioneve sociale.',
+                artist: 'Édouard Manet',
+                year: '1863',
+                medium: 'Oil on Canvas'
+            },
+            'sunflowers.jpg': {
+                title: 'Sunflowers',
+                desc: 'Një nga veprat më të njohura të van Gogh-t, kjo seri e luleve të lulediellit është një festë e ngjyrave dhe emocioneve. Çdo pikturë në seri ofron një interpretim të ndryshëm të temës.',
+                artist: 'Vincent van Gogh',
+                year: '1888',
+                medium: 'Oil on Canvas'
+            },
+            'starrynight.jpg': {
+                title: 'Starry Night',
+                desc: 'Një nga veprat më të njohura të artit modern, "Starry Night" e van Gogh-t është një shprehje e fuqishme e emocioneve të artistit përmes një peizazhi të fantastikëzuar.',
+                artist: 'Vincent van Gogh',
+                year: '1889',
+                medium: 'Oil on Canvas'
+            },
+            'girl_pearl.jpg': {
+                title: 'Girl with a Pearl Earring',
+                desc: 'E njohur si "Mona Lisa e Veriut", kjo vepër e Vermeer-it është një portret misterioz që ka fasuarin publikun për shekuj me shikimin e saj të drejtpërdrejtë dhe veshjen e saj të thjeshtë.',
+                artist: 'Johannes Vermeer',
+                year: '1665',
+                medium: 'Oil on Canvas'
+            },
+            'wheatfield_crows.jpg': {
+                title: 'Wheatfield with Crows',
+                desc: 'Një nga veprat e fundit të van Gogh-t, kjo pikturë është e njohur për atmosferën e saj të tensionuar dhe përdorimin dramatik të ngjyrave. Rrugët e kthesës dhe korvat e zeza shtojnë një ndjenjë të thellë të vetmisë dhe ankthit.',
+                artist: 'Vincent van Gogh',
+                year: '1890',
+                medium: 'Oil on Canvas'
+            },
+            'bal_du_moulin.jpg': {
+                title: 'Bal du moulin de la Galette',
+                desc: 'Një vepër tjetër e shquar e Renoir-it që kap atmosferën e festës në një kafene të njohur parisiane. Piktura është e njohur për përdorimin e saj të dritës dhe ngjyrave të gjalla.',
+                artist: 'Pierre-Auguste Renoir',
+                year: '1876',
+                medium: 'Oil on Canvas'
+            },
+            'bridge_argenteuil.jpg': {
+                title: 'The Bridge at Argenteuil',
+                desc: 'Një nga veprat më të njohura të Monet-t që paraqet një pamje të qetë të lumit Seine. Piktura është e njohur për përdorimin e saj të dritës dhe reflektimeve në ujë.',
+                artist: 'Claude Monet',
+                year: '1874',
+                medium: 'Oil on Canvas'
+            },
+            'luncheon_boat.jpg': {
+                title: 'Luncheon of the Boating Party',
+                desc: 'Një vepër e madhe e Renoir-it që paraqet një skenë të gëzimit dhe kënaqësisë në një restorant të lumit. Piktura është e njohur për përdorimin e saj të dritës dhe ngjyrave të gjalla.',
+                artist: 'Pierre-Auguste Renoir',
+                year: '1881',
+                medium: 'Oil on Canvas'
+            },
+            'haystacks.jpg': {
+                title: 'Haystacks',
+                desc: 'Seri e famshme e Monet-t që eksploron ndryshimet e dritës dhe ngjyrave në të njëjtën temë në kohë të ndryshme të ditës dhe stinëve të ndryshme.',
+                artist: 'Claude Monet',
+                year: '1890',
+                medium: 'Oil on Canvas'
+            },
+            'self_portrait.jpg': {
+                title: 'Self-Portrait with Bandaged Ear',
+                desc: 'Një portret i fuqishëm i van Gogh-t që dokumenton një nga momentet më të vështira të jetës së tij. Piktura është e njohur për përdorimin e saj të ngjyrave dhe shprehjes së fytyrës.',
+                artist: 'Vincent van Gogh',
+                year: '1889',
+                medium: 'Oil on Canvas'
+            },
+            'rouen_cathedral.jpg': {
+                title: 'Rouen Cathedral Series',
+                desc: 'Një seri veprash nga Monet që përshkruajnë katedralen e Rouen në kohë të ndryshme të ditës. Veprat janë të njohura për përdorimin e tyre të dritës dhe ngjyrave, si dhe për aftësinë e tyre për të kapur ndryshimet në dritë.',
+                artist: 'Claude Monet',
+                year: '1892-1894',
+                medium: 'Oil on Canvas'
+            }
+        };
+
+        // Debounce function to limit how often a function can fire
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Optimized scroll handler
+        const handleScroll = debounce(() => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, 100);
+
+        // Optimized resize handler
+        const handleResize = debounce(() => {
+            // Add any resize-specific optimizations here
+        }, 250);
+
+        // Event listeners with debounce
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleResize);
+
+        // Optimized lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.querySelector('.lightbox-info h3');
+        const lightboxDesc = document.querySelector('.lightbox-info p');
+        const lightboxArtist = document.querySelector('.lightbox-meta .artist');
+        const lightboxYear = document.querySelector('.lightbox-meta .year');
+        const lightboxMedium = document.querySelector('.lightbox-meta .medium');
+        const closeBtn = document.querySelector('.close-btn');
+        const zoomBtn = document.querySelector('.zoom-btn');
+
+        // Cache DOM elements
+        let isZoomed = false;
+
+        // Optimized click handler for gallery items
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const src = img.src.split('/').pop();
+                const data = artworkData[src];
+
+                if (data) {
+                    lightboxImg.src = img.src;
+                    lightboxTitle.textContent = data.title;
+                    lightboxDesc.textContent = data.desc;
+                    lightboxArtist.textContent = data.artist;
+                    lightboxYear.textContent = data.year;
+                    lightboxMedium.textContent = data.medium;
+
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Optimized close button handler
+        closeBtn.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            if (isZoomed) {
+                lightboxImg.style.transform = 'scale(1)';
+                isZoomed = false;
+            }
+        });
+
+        // Optimized lightbox click handler
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+                if (isZoomed) {
+                    lightboxImg.style.transform = 'scale(1)';
+                    isZoomed = false;
+                }
+            }
+        });
+
+        // Optimized zoom button handler
+        zoomBtn.addEventListener('click', () => {
+            isZoomed = !isZoomed;
+            lightboxImg.style.transform = isZoomed ? 'scale(1.5)' : 'scale(1)';
+            lightboxImg.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
+        });
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>
+

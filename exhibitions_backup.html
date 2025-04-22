@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exhibitions - Virtual Museum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #1a1a1a;
+        }
+
+        /* Header Styles */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        /* Featured Exhibition */
+        .featured-exhibition {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: transform 0.5s ease;
+        }
+
+        .featured-exhibition:hover .featured-image {
+            transform: scale(1.05);
+        }
+
+        .featured-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4rem 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .featured-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .featured-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .featured-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .featured-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: transform 0.3s ease;
+            font-weight: 500;
+        }
+
+        .featured-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Special Events Section */
+        .events-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-info {
+            padding: 2rem;
+        }
+
+        .event-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .event-info p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: transform 0.3s ease;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .event-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Interactive Experiences */
+        .interactive-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+        }
+
+        .interactive-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .interactive-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .interactive-icon {
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+        }
+
+        .interactive-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .interactive-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .interactive-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: transform 0.3s ease;
+            font-weight: 500;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Calendar Section */
+        .calendar-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .calendar-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #1a1a1a;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #d4af37;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            color: #8b6b3d;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: #e9ecef;
+        }
+
+        .calendar-day.has-event {
+            background: rgba(201, 166, 107, 0.2);
+            font-weight: 600;
+        }
+
+        .calendar-day.has-event:hover {
+            background: rgba(201, 166, 107, 0.4);
+        }
+
+        .calendar-day-number {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-day-event {
+            font-size: 0.8rem;
+            color: #d4af37;
+            text-align: center;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            padding: 0.5rem;
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            margin-top: 4rem;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: transform 0.3s ease;
+            font-weight: 500;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #fff;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .link-group h3 {
+            color: #c9a66b;
+            margin-bottom: 1rem;
+        }
+
+        .link-group a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .link-group a:hover {
+            color: #c9a66b;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            color: #fff;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #c9a66b;
+        }
+
+        .footer-credits {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .footer-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c9a66b, transparent, #c9a66b);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .featured-content h2 {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+                font-size: 0.8rem;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-credits {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="exhibitions_hero.jpg" alt="Exhibitions" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Exhibitions & Events</h1>
+            <p>Experience art in new ways through our special exhibitions, interactive events, and unique programs.</p>
+        </div>
+    </section>
+
+    <!-- Featured Exhibition -->
+    <section class="featured-exhibition">
+        <img src="featured_exhibition.jpg" alt="Featured Exhibition" class="featured-image">
+        <div class="featured-content">
+            <h2>Art & Technology: The Future of Museums</h2>
+            <p>An immersive journey exploring how technology is transforming the museum experience, featuring virtual reality installations, augmented reality exhibits, and interactive digital art.</p>
+            <div class="featured-meta">
+                <span><i class="fas fa-calendar"></i> May 15 - August 30, 2024</span>
+                <span><i class="fas fa-clock"></i> Daily, 10:00 AM - 6:00 PM</span>
+                <span><i class="fas fa-ticket-alt"></i> $25 (Members: Free)</span>
+            </div>
+            <a href="#" class="featured-btn">Book Tickets</a>
+        </div>
+    </section>
+
+    <!-- Special Events -->
+    <section class="events-section">
+        <div class="section-header">
+            <h2>Special Events</h2>
+            <p>Join us for unique experiences that bring art to life through workshops, talks, performances, and more.</p>
+        </div>
+        <div class="events-grid">
+            <!-- Event 1 -->
+            <div class="event-card">
+                <img src="artist_talk.jpg" alt="Artist Talk" class="event-image">
+                <div class="event-info">
+                    <h3>Artist Talk: Digital Frontiers</h3>
+                    <p>Join leading digital artists as they discuss the future of art in the digital age and share insights into their creative process.</p>
+                    <div class="event-meta">
+                        <span><i class="fas fa-calendar"></i> June 10, 2024</span>
+                        <span><i class="fas fa-clock"></i> 7:00 PM</span>
+                    </div>
+                    <a href="#" class="event-btn">Register Now</a>
+                </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="event-card">
+                <img src="workshop.jpg" alt="Art Workshop" class="event-image">
+                <div class="event-info">
+                    <h3>Interactive Art Workshop</h3>
+                    <p>Create your own digital artwork using cutting-edge technology in this hands-on workshop led by professional artists.</p>
+                    <div class="event-meta">
+                        <span><i class="fas fa-calendar"></i> June 15, 2024</span>
+                        <span><i class="fas fa-clock"></i> 2:00 PM</span>
+                    </div>
+                    <a href="#" class="event-btn">Register Now</a>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-card">
+                <img src="performance.jpg" alt="Art Performance" class="event-image">
+                <div class="event-info">
+                    <h3>Art & Music Performance</h3>
+                    <p>Experience a unique fusion of visual art and live music in this special performance that brings together artists and musicians.</p>
+                    <div class="event-meta">
+                        <span><i class="fas fa-calendar"></i> June 20, 2024</span>
+                        <span><i class="fas fa-clock"></i> 8:00 PM</span>
+                    </div>
+                    <a href="#" class="event-btn">Book Tickets</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Experiences -->
+    <section class="interactive-section">
+        <div class="interactive-container">
+            <div class="section-header">
+                <h2>Interactive Experiences</h2>
+                <p>Engage with art in new and exciting ways through our innovative interactive experiences.</p>
+            </div>
+            <div class="interactive-grid">
+                <!-- Experience 1 -->
+                <div class="interactive-card">
+                    <div class="interactive-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <h3>Virtual Reality Tours</h3>
+                    <p>Step into famous artworks and historical periods through our immersive VR experiences.</p>
+                    <a href="#" class="interactive-btn">Explore VR</a>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="interactive-card">
+                    <div class="interactive-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Augmented Reality</h3>
+                    <p>Use your smartphone to unlock hidden layers of meaning in our artworks through AR technology.</p>
+                    <a href="#" class="interactive-btn">Try AR</a>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="interactive-card">
+                    <div class="interactive-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Digital Art Studio</h3>
+                    <p>Create your own digital masterpieces using our interactive digital art tools and share them with the world.</p>
+                    <a href="#" class="interactive-btn">Start Creating</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calendar Section -->
+    <section class="calendar-section">
+        <div class="section-header">
+            <h2>Event Calendar</h2>
+            <p>Plan your visit with our comprehensive calendar of exhibitions, events, and special programs.</p>
+        </div>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h3 class="calendar-title">June 2024</h3>
+                <div class="calendar-nav">
+                    <button><i class="fas fa-chevron-left"></i></button>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="calendar-grid">
+                <div class="calendar-weekday">Sun</div>
+                <div class="calendar-weekday">Mon</div>
+                <div class="calendar-weekday">Tue</div>
+                <div class="calendar-weekday">Wed</div>
+                <div class="calendar-weekday">Thu</div>
+                <div class="calendar-weekday">Fri</div>
+                <div class="calendar-weekday">Sat</div>
+                
+                <!-- Calendar Days -->
+                <div class="calendar-day">
+                    <div class="calendar-day-number">26</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">27</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">28</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">29</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">30</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">31</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">1</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">2</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">3</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">4</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">5</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">6</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">7</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">8</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">9</div>
+                </div>
+                <div class="calendar-day has-event">
+                    <div class="calendar-day-number">10</div>
+                    <div class="calendar-day-event">Artist Talk</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">11</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">12</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">13</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">14</div>
+                </div>
+                <div class="calendar-day has-event">
+                    <div class="calendar-day-number">15</div>
+                    <div class="calendar-day-event">Workshop</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">16</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">17</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">18</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">19</div>
+                </div>
+                <div class="calendar-day has-event">
+                    <div class="calendar-day-number">20</div>
+                    <div class="calendar-day-event">Performance</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">21</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">22</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">23</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">24</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">25</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">26</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">27</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">28</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">29</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">30</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">1</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">2</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">3</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">4</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">5</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="calendar-day-number">6</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to our newsletter to receive updates about new exhibitions, special events, and exclusive previews.</p>
+            <a href="#" class="cta-btn">Subscribe Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-logo">
+                    <h2>Virtual Museum</h2>
+                    <p>Where Art Meets Innovation</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Explore</h3>
+                        <a href="web.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="collections.html">Collections</a>
+                        <a href="exhibitions.html">Exhibitions</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Collections</h3>
+                        <a href="renaissance.html">Renaissance</a>
+                        <a href="modern.html">Modern</a>
+                        <a href="contemporary.html">Contemporary</a>
+                        <a href="digital.html">Digital</a>
+                    </div>
+                    <div class="link-group">
+                        <h3>Connect</h3>
+                        <a href="#">Events</a>
+                        <a href="#">Membership</a>
+                        <a href="#">Donate</a>
+                        <a href="#">Contact</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="footer-credits">
+                    <p>© 2024 Virtual Museum. All rights reserved.</p>
+                    <p>Created with passion for art and technology</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Calendar navigation
+        const prevBtn = document.querySelector('.calendar-nav button:first-child');
+        const nextBtn = document.querySelector('.calendar-nav button:last-child');
+        const calendarTitle = document.querySelector('.calendar-title');
+        
+        let currentMonth = 5; // June (0-based)
+        let currentYear = 2024;
+        
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        prevBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            calendarTitle.textContent = `${months[currentMonth]} ${currentYear}`;
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            calendarTitle.textContent = `${months[currentMonth]} ${currentYear}`;
+        });
+    </script>
+</body>
+</html> 

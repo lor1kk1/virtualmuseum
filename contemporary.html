@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contemporary Art - Virtual Museum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #1a1a1a;
+        }
+
+        /* Header Styles */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: 600px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .slide-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #c9a66b;
+            transform: scale(1.2);
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: #c9a66b;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+        }
+
+        .gallery-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gallery-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #c9a66b;
+            background: transparent;
+            color: #1a1a1a;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item:hover .gallery-overlay h3 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-overlay p {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .gallery-overlay p {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .artwork-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.3s;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .artwork-meta {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        /* Lightbox */
+        .gallery-zoom {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover .gallery-zoom {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-zoom i {
+            color: #1a1a1a;
+            font-size: 1.2rem;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 2rem auto;
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .lightbox-img {
+            max-width: 60%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-details {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            color: white;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .lightbox-details h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .lightbox-details .artist {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .lightbox-details .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            white-space: pre-line;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            font-size: 1rem;
+            opacity: 0.8;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lightbox-meta i {
+            color: #d4af37;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .lightbox-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .lightbox-img {
+                max-width: 100%;
+                max-height: 50vh;
+            }
+
+            .lightbox-details {
+                max-height: none;
+            }
+        }
+
+        /* Footer Styles */
+        .renaissance-footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: normal;
+        }
+
+        .footer-section p {
+            color: #fff;
+            line-height: 1.5;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: #2a2a2a;
+            border: none;
+            padding: 0.8rem;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Artists Section Styles */
+        .artists-section {
+            padding: 4rem 2rem;
+            background-color: #fff;
+        }
+
+        .artists-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .artist-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .artist-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 1.5rem;
+        }
+
+        .artist-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: #c9a66b;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="bckg 4.jpg" alt="Contemporary Art" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Arti Bashkëkohorë</h1>
+            <p>Eksploroni botën e guximshme, inovative dhe nxitëse të mendimit të artit bashkëkohor, ku kufijtë tradicionalë sfidohen dhe shfaqen forma të reja të shprehjes.</p>
+        </div>
+    </section>
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <img src="balloon_dog.jpg" alt="Balloon Dog (Orange)">
+                <div class="slide-content">
+                    <h2>Balloon Dog (Orange)</h2>
+                    <p>Skulptura ikonë e Jeff Koons nga 1994-2000, duke transformuar një kafshë të thjeshtë tullumbace në një vepër monumentale arti.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="weather_project.jpg" alt="The Weather Project">
+                <div class="slide-content">
+                    <h2>The Weather Project</h2>
+                    <p>Instalimi gjithëpërfshirës i Olafur Eliasson nga viti 2003, duke krijuar një diell artificial në Sallën Turbine të Tate Modern.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="infinity_room.jpg" alt="Infinity Mirror Room">
+                <div class="slide-content">
+                    <h2>Infinity Mirror Room</h2>
+                    <p>Instalimi magjepsës i Yayoi Kusama nga viti 2011, duke krijuar një hapësirë ​​të pafund reflektimesh dhe drite.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <div class="gallery-section">
+        <div class="gallery-header">
+            <h2>Veprat e Artit Bashkëkohorë</h2>
+            <p>Zbuloni veprat revolucionare të artit që sfiduan perspektivat tradicionale dhe ripërcaktuan shprehjen artistike në epokën moderne.</p>
+        </div>
+
+        <div class="gallery-controls">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Te gjitha</button>
+                <button class="filter-btn" data-filter="installation">Instalime</button>
+                <button class="filter-btn" data-filter="conceptual">Konceptual</button>
+                <button class="filter-btn" data-filter="performance">Performanca</button>
+                <button class="filter-btn" data-filter="digital">Digital</button>
+                <button class="filter-btn" data-filter="sculpture">Skulptura</button>
+                <button class="filter-btn" data-filter="street">Art Rrugor</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- Artwork 1 -->
+            <div class="gallery-item" data-category="sculpture">
+                <img src="balloon_dog.jpg" alt="Balloon Dog (Orange)">
+                <div class="gallery-overlay">
+                    <h3>Balloon Dog (Orange)</h3>
+                    <p>Jeff Koons</p>
+                    <div class="artwork-meta">
+                        <span>1994-2000</span>
+                        <span>Mirror-polished stainless steel</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('balloon_dog.jpg', 'Balloon Dog (Orange)', 'Jeff Koons', '1994-2000', 'Mirror-polished stainless steel')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 2 -->
+            <div class="gallery-item" data-category="installation">
+                <img src="weather_project.jpg" alt="The Weather Project">
+                <div class="gallery-overlay">
+                    <h3>The Weather Project</h3>
+                    <p>Olafur Eliasson</p>
+                    <div class="artwork-meta">
+                        <span>2003</span>
+                        <span>Installation</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('weather_project.jpg', 'The Weather Project', 'Olafur Eliasson', '2003', 'Installation')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 3 -->
+            <div class="gallery-item" data-category="street">
+                <img src="girl_balloon.jpg" alt="Girl with Balloon">
+                <div class="gallery-overlay">
+                    <h3>Girl with Balloon</h3>
+                    <p>Banksy</p>
+                    <div class="artwork-meta">
+                        <span>2002</span>
+                        <span>Stencil on wall</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('girl_balloon.jpg', 'Girl with Balloon', 'Banksy', '2002', 'Stencil on wall')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 4 -->
+            <div class="gallery-item" data-category="installation">
+                <img src="infinity_room.jpg" alt="Infinity Mirror Room">
+                <div class="gallery-overlay">
+                    <h3>Infinity Mirror Room</h3>
+                    <p>Yayoi Kusama</p>
+                    <div class="artwork-meta">
+                        <span>2011</span>
+                        <span>Installation</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('infinity_room.jpg', 'Infinity Mirror Room', 'Yayoi Kusama', '2011', 'Installation')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 5 -->
+            <div class="gallery-item" data-category="performance">
+                <img src="artist_present.jpg" alt="The Artist is Present">
+                <div class="gallery-overlay">
+                    <h3>The Artist is Present</h3>
+                    <p>Marina Abramović</p>
+                    <div class="artwork-meta">
+                        <span>2010</span>
+                        <span>Performance art</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('artist_present.jpg', 'The Artist is Present', 'Marina Abramović', '2010', 'Performance art')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 6 -->
+            <div class="gallery-item" data-category="digital">
+                <img src="everydays.jpg" alt="Everydays: The First 5000 Days">
+                <div class="gallery-overlay">
+                    <h3>Everydays: The First 5000 Days</h3>
+                    <p>Beeple</p>
+                    <div class="artwork-meta">
+                        <span>2021</span>
+                        <span>Digital artwork (NFT)</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('everydays.jpg', 'Everydays: The First 5000 Days', 'Beeple', '2021', 'Digital artwork (NFT)')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 7 -->
+            <div class="gallery-item" data-category="sculpture">
+                <img src="cloud_gate.jpg" alt="Cloud Gate">
+                <div class="gallery-overlay">
+                    <h3>Cloud Gate</h3>
+                    <p>Anish Kapoor</p>
+                    <div class="artwork-meta">
+                        <span>2004</span>
+                        <span>Stainless steel sculpture</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('cloud_gate.jpg', 'Cloud Gate', 'Anish Kapoor', '2004', 'Stainless steel sculpture')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 8 -->
+            <div class="gallery-item" data-category="installation">
+                <img src="rain_room.jpg" alt="Rain Room">
+                <div class="gallery-overlay">
+                    <h3>Rain Room</h3>
+                    <p>Random International</p>
+                    <div class="artwork-meta">
+                        <span>2012</span>
+                        <span>Interactive installation</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('rain_room.jpg', 'Rain Room', 'Random International', '2012', 'Interactive installation')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 9 -->
+            <div class="gallery-item" data-category="street">
+                <img src="obey_giant.jpg" alt="OBEY Giant">
+                <div class="gallery-overlay">
+                    <h3>OBEY Giant</h3>
+                    <p>Shepard Fairey</p>
+                    <div class="artwork-meta">
+                        <span>1989-present</span>
+                        <span>Street art campaign</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('obey_giant.jpg', 'OBEY Giant', 'Shepard Fairey', '1989-present', 'Street art campaign')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 10 -->
+            <div class="gallery-item" data-category="digital">
+                <img src="crypto_punks.jpg" alt="CryptoPunks">
+                <div class="gallery-overlay">
+                    <h3>CryptoPunks</h3>
+                    <p>Larva Labs</p>
+                    <div class="artwork-meta">
+                        <span>2017</span>
+                        <span>Digital art (NFT)</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('crypto_punks.jpg', 'CryptoPunks', 'Larva Labs', '2017', 'Digital art (NFT)')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 11 -->
+            <div class="gallery-item" data-category="installation">
+                <img src="sunflower_seeds.jpg" alt="Sunflower Seeds">
+                <div class="gallery-overlay">
+                    <h3>Sunflower Seeds</h3>
+                    <p>Ai Weiwei</p>
+                    <div class="artwork-meta">
+                        <span>2010</span>
+                        <span>Porcelain installation</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('sunflower_seeds.jpg', 'Sunflower Seeds', 'Ai Weiwei', '2010', 'Porcelain installation')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 12 -->
+            <div class="gallery-item" data-category="conceptual">
+                <img src="shark_tank.jpg" alt="The Physical Impossibility of Death in the Mind of Someone Living">
+                <div class="gallery-overlay">
+                    <h3>The Physical Impossibility of Death in the Mind of Someone Living</h3>
+                    <p>Damien Hirst</p>
+                    <div class="artwork-meta">
+                        <span>1991</span>
+                        <span>Glass, steel, formaldehyde solution</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('shark_tank.jpg', 'The Physical Impossibility of Death in the Mind of Someone Living', 'Damien Hirst', '1991', 'Glass, steel, formaldehyde solution')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 13 -->
+            <div class="gallery-item" data-category="performance">
+                <img src="rhythm_0.jpg" alt="Rhythm 0">
+                <div class="gallery-overlay">
+                    <h3>Rhythm 0</h3>
+                    <p>Marina Abramović</p>
+                    <div class="artwork-meta">
+                        <span>1974</span>
+                        <span>Performance art</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('rhythm_0.jpg', 'Rhythm 0', 'Marina Abramović', '1974', 'Performance art')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 14 -->
+            <div class="gallery-item" data-category="street">
+                <img src="flower_thrower.jpg" alt="Flower Thrower">
+                <div class="gallery-overlay">
+                    <h3>Flower Thrower</h3>
+                    <p>Banksy</p>
+                    <div class="artwork-meta">
+                        <span>2003</span>
+                        <span>Stencil on wall</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('flower_thrower.jpg', 'Flower Thrower', 'Banksy', '2003', 'Stencil on wall')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 15 -->
+            <div class="gallery-item" data-category="digital">
+                <img src="nft_art.jpg" alt="Crossroads">
+                <div class="gallery-overlay">
+                    <h3>Crossroads</h3>
+                    <p>Beeple</p>
+                    <div class="artwork-meta">
+                        <span>2021</span>
+                        <span>Digital artwork (NFT)</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('nft_art.jpg', 'Crossroads', 'Beeple', '2021', 'Digital artwork (NFT)')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Artists Section -->
+    <section class="artists-section">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <h2>Artistet e Artit Bashkëkohorë</h2>
+            <div class="divider-line"></div>
+        </div>
+        <div class="artists-container">
+            <!-- Artist 1 -->
+            <div class="artist-card">
+                <img src="jeff_koons.jpg" alt="Jeff Koons">
+                <div class="artist-info">
+                    <h3>Jeff Koons</h3>
+                    <p>1955-tani</p>
+                    <p>Artist amerikan i njohur për skulpturat e tij të mëdha dhe veprat që eksplorojnë temat e kulturës së konsumit. Krijoi vepra ikonike si "Balloon Dog" dhe "Puppy".</p>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card">
+                <img src="yayoi_kusama.jpg" alt="Yayoi Kusama">
+                <div class="artist-info">
+                    <h3>Yayoi Kusama</h3>
+                    <p>1929-tani</p>
+                    <p>Artist japoneze e njohur për instalimet e saj të mëdha dhe përdorimin e pikave. Krijoi "Infinity Mirror Rooms" dhe vepra të tjera që eksplorojnë temën e pafundësisë.</p>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card">
+                <img src="banksy.jpg" alt="Banksy">
+                <div class="artist-info">
+                    <h3>Banksy</h3>
+                    <p>1974-tani</p>
+                    <p>Artist misterioz i artit rrugor, i njohur për veprat e tij satirike dhe komentet sociale. Krijoi vepra ikonike si "Girl with Balloon" dhe "Flower Thrower".</p>
+                </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="artist-card">
+                <img src="marina_abramovic.jpg" alt="Marina Abramović">
+                <div class="artist-info">
+                    <h3>Marina Abramović</h3>
+                    <p>1946-tani</p>
+                    <p>Pioniere e artit performativ, e njohur për veprat e saj kushtuese dhe eksperimentale. Krijoi vepra të njohura si "The Artist is Present" dhe "Rhythm 0".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img class="lightbox-img" src="" alt="">
+            <div class="lightbox-details">
+                <h3></h3>
+                <p class="artist"></p>
+                <p class="description"></p>
+                <div class="lightbox-meta">
+                    <span><i class="fas fa-calendar"></i> <span class="lightbox-year"></span></span>
+                    <span><i class="fas fa-palette"></i> <span class="lightbox-medium"></span></span>
+                    <span><i class="fas fa-map-marker-alt"></i> <span class="lightbox-location"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="lightbox-nav">
+            <button class="lightbox-btn prev" onclick="prevLightbox()"><i class="fas fa-chevron-left"></i></button>
+            <button class="lightbox-btn next" onclick="nextLightbox()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="renaissance-footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <h3>Rreth Nesh</h3>
+                    <p>Muzeu Virtual është një platformë inovative që sjell artin në shtëpinë tuaj. Eksploroni koleksionet tona të pasura dhe përjetoni artin në një mënyrë të re dhe interaktive.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="web.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="collections.html">Collections</a>
+                        <a href="exhibitions.html">Exhibitions</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <form class="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Virtual Museum. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Slider functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const dots = document.querySelectorAll('.dot');
+        
+        let currentSlide = 0;
+        const slideCount = slides.length;
+        let slideInterval;
+        
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+        }
+        
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            prevSlide();
+            startAutoSlide();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            nextSlide();
+            startAutoSlide();
+        });
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = index;
+                updateSlider();
+                startAutoSlide();
+            });
+        });
+        
+        // Initialize slider
+        startAutoSlide();
+
+        // Gallery Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const filter = button.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.querySelector('.lightbox-details h3');
+        const lightboxArtist = document.querySelector('.lightbox-details .artist');
+        const lightboxYear = document.querySelector('.lightbox-details .lightbox-year');
+        const lightboxMedium = document.querySelector('.lightbox-details .lightbox-medium');
+        const lightboxDescription = document.querySelector('.lightbox-details .description');
+        const lightboxLocation = document.querySelector('.lightbox-details .lightbox-location');
+        let isZoomed = false;
+
+        function openLightbox(imgSrc, title, artist, year, medium, location) {
+            lightboxImg.src = imgSrc;
+            lightboxTitle.textContent = title;
+            lightboxArtist.textContent = artist;
+            lightboxYear.textContent = year;
+            lightboxMedium.textContent = medium;
+            lightboxDescription.textContent = artworkData[imgSrc]?.desc || 'A masterpiece of contemporary art, showcasing the period\'s focus on innovation and new forms of expression.';
+            lightboxLocation.textContent = location || '';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            isZoomed = false;
+            lightboxImg.style.transform = 'scale(1)';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            isZoomed = false;
+            lightboxImg.style.transform = 'scale(1)';
+        }
+
+        function toggleZoom() {
+            isZoomed = !isZoomed;
+            lightboxImg.style.transform = isZoomed ? 'scale(1.5)' : 'scale(1)';
+        }
+
+        // Close lightbox when clicking outside
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                }
+            }
+        });
+
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Artwork data
+        const artworkData = {
+            'balloon_dog.jpg': {
+                desc: 'Balloon Dog (Orange) is one of Jeff Koons\' most iconic sculptures, part of his Celebration series. The work transforms a simple balloon dog into a monumental stainless steel sculpture, exploring themes of childhood, consumer culture, and the nature of art.'
+            },
+            'weather_project.jpg': {
+                desc: 'The Weather Project was a monumental installation at the Tate Modern\'s Turbine Hall. Using a giant sun made of hundreds of lamps and a fine mist, Eliasson created an artificial weather system that transformed the space into an immersive environment.'
+            },
+            'girl_balloon.jpg': {
+                desc: 'Girl with Balloon is one of Banksy\'s most recognizable works, featuring a young girl reaching for a red heart-shaped balloon. The piece has become a symbol of hope and innocence, while also commenting on the commercialization of art.'
+            },
+            'infinity_room.jpg': {
+                desc: 'Infinity Mirror Room is part of Yayoi Kusama\'s ongoing series of immersive installations. Using mirrors and LED lights, Kusama creates an infinite space that challenges our perception of self and space.'
+            },
+            'artist_present.jpg': {
+                desc: 'The Artist is Present was a landmark performance piece where Marina Abramović sat silently across from visitors for 736 hours over three months. The work explored themes of presence, connection, and the relationship between artist and audience.'
+            },
+            'everydays.jpg': {
+                desc: 'Everydays: The First 5000 Days is a digital artwork by Beeple that sold as an NFT for $69 million. The piece represents 5,000 days of daily digital art creation, showcasing the evolution of digital art and the impact of blockchain technology on the art market.'
+            },
+            'cloud_gate.jpg': {
+                desc: 'Cloud Gate, also known as "The Bean," is a massive stainless steel sculpture that reflects and distorts the Chicago skyline. The work invites viewers to interact with their own reflections and the surrounding environment.'
+            },
+            'rain_room.jpg': {
+                desc: 'Rain Room is an interactive installation that creates a field of falling water that pauses wherever a person walks. The work combines art, technology, and human interaction to create a unique sensory experience.'
+            },
+            'obey_giant.jpg': {
+                desc: 'OBEY Giant is a street art campaign by Shepard Fairey that began in 1989. The work has evolved into a global phenomenon, exploring themes of propaganda, consumerism, and the power of visual communication.'
+            },
+            'crypto_punks.jpg': {
+                desc: 'CryptoPunks are 10,000 unique collectible characters created by Larva Labs. As one of the first NFT projects, they helped establish the digital art market and continue to influence the intersection of art and blockchain technology.'
+            },
+            'sunflower_seeds.jpg': {
+                desc: 'Sunflower Seeds consisted of 100 million hand-painted porcelain seeds spread across the floor of the Tate Modern\'s Turbine Hall. The work explores themes of mass production, individuality, and Chinese cultural identity.'
+            },
+            'shark_tank.jpg': {
+                desc: 'The Physical Impossibility of Death in the Mind of Someone Living features a preserved tiger shark in a glass tank of formaldehyde. The work challenges our understanding of death and the boundaries of contemporary art.'
+            },
+            'rhythm_0.jpg': {
+                desc: 'Rhythm 0 was a six-hour performance where Marina Abramović placed 72 objects on a table and allowed the audience to use them on her body. The work explored themes of trust, vulnerability, and the relationship between artist and audience.'
+            },
+            'flower_thrower.jpg': {
+                desc: 'Flower Thrower is a Banksy stencil showing a masked protester throwing a bouquet of flowers instead of a Molotov cocktail. The work comments on peace, protest, and the power of non-violent resistance.'
+            },
+            'nft_art.jpg': {
+                desc: 'Crossroads is a digital artwork by Beeple that sold as an NFT for $6.6 million. The piece showcases the artist\'s distinctive style and the growing significance of digital art in the contemporary art market.'
+            }
+        };
+    </script>
+</body>
+</html>
+

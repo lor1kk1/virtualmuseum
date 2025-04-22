@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art - Virtual Museum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #1a1a1a;
+        }
+
+        /* Header Styles */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+        }
+
+        .gallery-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gallery-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #c9a66b;
+            background: transparent;
+            color: #1a1a1a;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item:hover .gallery-overlay h3 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-overlay p {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .gallery-overlay p {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .artwork-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .artwork-meta {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .lightbox-img-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-info {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+        }
+
+        .lightbox-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .lightbox-info p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .lightbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: #d4af37;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-meta i {
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        /* Artists Section */
+        .artists-section {
+            padding: 4rem 2rem;
+            background-color: #fff;
+        }
+
+        .artists-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .artist-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .artist-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 1.5rem;
+        }
+
+        .artist-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: #c9a66b;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #fff;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            padding: 0.5rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #afafaf;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links li {
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+            transform: translateX(5px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form textarea {
+            min-height: 80px;
+        }
+
+        .contact-form button {
+            padding: 0.5rem 1rem;
+            background: #d4af37;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-section {
+                padding: 0;
+            }
+        }
+
+        /* Slider Styles */
+        .slider-section {
+            padding: 2rem 0;
+            background-color: #f8f9fa;
+            margin-bottom: 4rem;
+        }
+
+        .slider-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 500px;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .slide:hover .slide-content {
+            transform: translateY(0);
+        }
+
+        .slide-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .slider {
+                height: 350px;
+            }
+            
+            .slide-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .slide-content p {
+                font-size: 1rem;
+            }
+            
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="digitalart.jpg" alt="Digital Art" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Arti Digjital</h1>
+            <p>Eksploroni botën më të avancuar të artit dixhital, ku teknologjia takohet me kreativitetin për të krijuar vepra arti novatore dhe që shtyjnë kufijtë.</p>
+        </div>
+    </section>
+
+    <!-- Slider Section -->
+    <section class="slider-section">
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide">
+                    <img src="neural_network_art.jpg" alt="Neural Network Art">
+                    <div class="slide-content">
+                        <h2>Neural Network Art</h2>
+                        <p>Vepra revolucionare e Mario Klingemann që përdor rrjete nervore artificiale për të krijuar art vizual unik që sfidon perceptimin njerëzor.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="crypto_punks.jpg" alt="CryptoPunks">
+                    <div class="slide-content">
+                        <h2>CryptoPunks</h2>
+                        <p>Një nga koleksionet e para NFT që revolucionizën botën e artit digital. 10,000 karaktere unike që u bënë ikona të artit digital.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="refik_anadol.jpg" alt="Machine Hallucination">
+                    <div class="slide-content">
+                        <h2>Machine Hallucination</h2>
+                        <p>Instalim masiv nga Refik Anadol që përdor AI për të krijuar një eksperiencë vizuale tërheqëse dhe imersive.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="teamlab.jpg" alt="TeamLab Borderless">
+                    <div class="slide-content">
+                        <h2>TeamLab Borderless</h2>
+                        <p>Eksperienca interaktive që transformon hapësirat në një galeri të gjallë, duke kombinuar artin, teknologjinë dhe natyrën.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            <div class="slider-dots"></div>
+        </div>
+    </section>
+
+    <div class="gallery-section">
+        <div class="gallery-header">
+            <h2>Veprat e Artit Digjital</h2>
+            <p>Zbuloni vepra arti dixhitale novator që shtyjnë kufijtë e teknologjisë dhe krijimtarisë, nga NFT-të deri te instalimet interaktive.</p>
+        </div>
+
+        <div class="gallery-controls">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Te gjitha</button>
+                <button class="filter-btn" data-filter="nft">NFTs</button>
+                <button class="filter-btn" data-filter="generative">Gjenerative</button>
+                <button class="filter-btn" data-filter="interactive">Interaktive</button>
+                <button class="filter-btn" data-filter="3d">Arti 3D</button>
+                <button class="filter-btn" data-filter="animation">Animacione</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- Artwork 1 -->
+            <div class="gallery-item" data-category="nft">
+                <img src="everydays.jpg" alt="Everydays: The First 5000 Days">
+                <div class="gallery-overlay">
+                    <h3>Everydays: The First 5000 Days</h3>
+                    <p>Beeple</p>
+                    <div class="artwork-meta">
+                        <span>2021</span>
+                        <span>Digital artwork (NFT)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 2 -->
+            <div class="gallery-item" data-category="generative">
+                <img src="generative_art.jpg" alt="Generative Artwork">
+                <div class="gallery-overlay">
+                    <h3>Generative Artwork</h3>
+                    <p>Casey Reas</p>
+                    <div class="artwork-meta">
+                        <span>2022</span>
+                        <span>Algorithm-based art</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 3 -->
+            <div class="gallery-item" data-category="interactive">
+                <img src="interactive.avif" alt="Interactive Installation">
+                <div class="gallery-overlay">
+                    <h3>Interactive Installation</h3>
+                    <p>TeamLab</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>Digital installation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 4 -->
+            <div class="gallery-item" data-category="3d">
+                <img src="3d_sculpture.jpg" alt="3D Digital Sculpture">
+                <div class="gallery-overlay">
+                    <h3>3D Digital Sculpture</h3>
+                    <p>Daniel Arsham</p>
+                    <div class="artwork-meta">
+                        <span>2022</span>
+                        <span>3D modeling</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 5 -->
+            <div class="gallery-item" data-category="animation">
+                <img src="digital_animation.jpg" alt="Digital Animation">
+                <div class="gallery-overlay">
+                    <h3>Digital Animation</h3>
+                    <p>David OReilly</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>3D animation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 6 -->
+            <div class="gallery-item" data-category="nft">
+                <img src="crypto_punks.jpg" alt="CryptoPunks">
+                <div class="gallery-overlay">
+                    <h3>CryptoPunks</h3>
+                    <p>Larva Labs</p>
+                    <div class="artwork-meta">
+                        <span>2017</span>
+                        <span>NFT collection</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 7 -->
+            <div class="gallery-item" data-category="generative">
+                <img src="algorithm_art.jpg" alt="Algorithm Art">
+                <div class="gallery-overlay">
+                    <h3>Algorithm Art</h3>
+                    <p>Harold Cohen</p>
+                    <div class="artwork-meta">
+                        <span>2022</span>
+                        <span>AI-generated art</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 8 -->
+            <div class="gallery-item" data-category="interactive">
+                <img src="virtual_reality.jpg" alt="Virtual Reality Art">
+                <div class="gallery-overlay">
+                    <h3>Virtual Reality Art</h3>
+                    <p>Marina Abramović</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>VR experience</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 9 -->
+            <div class="gallery-item" data-category="3d">
+                <img src="digital_sculpture.jpg" alt="Digital Sculpture">
+                <div class="gallery-overlay">
+                    <h3>Digital Sculpture</h3>
+                    <p>Refik Anadol</p>
+                    <div class="artwork-meta">
+                        <span>2022</span>
+                        <span>3D printing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 10 -->
+            <div class="gallery-item" data-category="animation">
+                <img src="motion_graphics.jpg" alt="Motion Graphics">
+                <div class="gallery-overlay">
+                    <h3>Motion Graphics</h3>
+                    <p>GMUNK</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>Motion design</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 11 -->
+            <div class="gallery-item" data-category="generative">
+                <img src="neural_network_art.jpg" alt="Neural Network Art">
+                <div class="gallery-overlay">
+                    <h3>Neural Network Art</h3>
+                    <p>Mario Klingemann</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>AI-generated art</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artwork 12 -->
+            <div class="gallery-item" data-category="interactive">
+                <img src="augmented_reality.jpg" alt="Augmented Reality Art">
+                <div class="gallery-overlay">
+                    <h3>Augmented Reality Art</h3>
+                    <p>Olafur Eliasson</p>
+                    <div class="artwork-meta">
+                        <span>2023</span>
+                        <span>AR installation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Artists Section -->
+    <section class="artists-section">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <h2>Artistet e Artit Digjital</h2>
+            <div class="divider-line"></div>
+        </div>
+        <div class="artists-container">
+            <!-- Artist 1 -->
+            <div class="artist-card">
+                <img src="beeple.jpg" alt="Beeple">
+                <div class="artist-info">
+                    <h3>Beeple</h3>
+                    <p>1981-tani</p>
+                    <p>Artist digital i njohur për veprën e tij "Everydays" dhe për shitjen e NFT-së së tij për 69 milion dollarë. Krijoi vepra që kombinojnë elemente të artit tradicional me teknologjinë moderne.</p>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card">
+                <img src="refik_anadol1.jpg" alt="Refik Anadol">
+                <div class="artist-info">
+                    <h3>Refik Anadol</h3>
+                    <p>1985-tani</p>
+                    <p>Artist i njohur për instalimet e tij të mëdha që përdorin të dhëna dhe inteligjencë artificiale. Krijoi vepra inovative që transformojnë hapësirat publike në eksperience interaktive.</p>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card">
+                <img src="casey_reas.jpg" alt="Casey Reas">
+                <div class="artist-info">
+                    <h3>Casey Reas</h3>
+                    <p>1972-tani</p>
+                    <p>Pionier i artit gjenerativ dhe bashkrijuesi i Processing. Zhvilloi algoritme që krijojnë art vizual dhe instalime interaktive që eksplorojnë marrëdhënien mes kodit dhe kreativitetit.</p>
+                </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="artist-card">
+                <img src="teamlab1.jpg" alt="TeamLab">
+                <div class="artist-info">
+                    <h3>TeamLab</h3>
+                    <p>2001-tani</p>
+                    <p>Kollektivi artistik që krijon instalime interaktive që kombinojnë artin, teknologjinë dhe natyrën. Veprat e tyre transformojnë hapësirat në eksperience imersive që angazhojnë vizitorët.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn"><i class="fas fa-times"></i></span>
+            <div class="lightbox-img-container">
+                <img src="" alt="" class="lightbox-img">
+                <button class="zoom-btn"><i class="fas fa-search-plus"></i></button>
+            </div>
+            <div class="lightbox-info">
+                <h3></h3>
+                <p></p>
+                <div class="lightbox-meta">
+                    <span><i class="fas fa-palette"></i> <span class="artist"></span></span>
+                    <span><i class="fas fa-calendar"></i> <span class="year"></span></span>
+                    <span><i class="fas fa-paint-brush"></i> <span class="medium"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Rreth Nesh</h3>
+                <p>Zbuloni botën e mbledhjeve të artit të botës së shumta përmes një shërbimi digital të njëjtësi.</p>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Quick links</h3>
+                <ul class="footer-links">
+                    <li><a href="web.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="collections.html">Collections</a></li>
+                    <li><a href="exhibitions.html">Exhibitions</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Contact Us</h3>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Virtual Museum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gallery Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const filter = button.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.querySelector('.lightbox-info h3');
+        const lightboxDesc = document.querySelector('.lightbox-info p');
+        const lightboxArtist = document.querySelector('.lightbox-meta .artist');
+        const lightboxYear = document.querySelector('.lightbox-meta .year');
+        const lightboxMedium = document.querySelector('.lightbox-meta .medium');
+        const closeBtn = document.querySelector('.close-btn');
+        const zoomBtn = document.querySelector('.zoom-btn');
+
+        let isZoomed = false;
+
+        // Artwork data
+        const artworkData = {
+            'everydays.jpg': {
+                title: 'Everydays: The First 5000 Days',
+                desc: 'Një vepër revolucionare në botën e artit digital që u shit si NFT për 69 milion dollarë. Vepra përfaqëson 5000 ditë të krijuara arti digital dhe tregon evolucionin e artit digital.',
+                artist: 'Beeple',
+                year: '2021',
+                medium: 'Digital artwork (NFT)'
+            },
+            'generative_art.jpg': {
+                title: 'Generative Artwork',
+                desc: 'Vepër e krijuar duke përdorur algoritme dhe procese kompjuterike për të gjeneruar art vizual unik. Eksploron marrëdhënien mes kodit dhe kreativitetit.',
+                artist: 'Casey Reas',
+                year: '2022',
+                medium: 'Algorithm-based art'
+            },
+            'interactive_installation.jpg': {
+                title: 'Interactive Installation',
+                desc: 'Instalim digital që përdor teknologji për të krijuar një eksperiencë interaktive. Vizitorët mund të ndërveprojnë me veprën dhe të ndryshojnë rezultatin.',
+                artist: 'TeamLab',
+                year: '2023',
+                medium: 'Digital installation'
+            },
+            '3d_sculpture.jpg': {
+                title: '3D Digital Sculpture',
+                desc: 'Skulpturë e krijuar duke përdorur teknologji 3D dhe printim 3D. Kombinon artin tradicional me inovacionin teknologjik.',
+                artist: 'Daniel Arsham',
+                year: '2022',
+                medium: '3D modeling'
+            },
+            'digital_animation.jpg': {
+                title: 'Digital Animation',
+                desc: 'Animacion i krijuar duke përdorur teknologji moderne që eksploron kufijtë e artit digital dhe narrativën vizuale.',
+                artist: 'David OReilly',
+                year: '2023',
+                medium: '3D animation'
+            },
+            'crypto_punks.jpg': {
+                title: 'CryptoPunks',
+                desc: 'Një nga koleksionet e para NFT që revolucionizën botën e artit digital. 10,000 karaktere unike që u bënë ikona të artit digital.',
+                artist: 'Larva Labs',
+                year: '2017',
+                medium: 'NFT collection'
+            },
+            'algorithm_art.jpg': {
+                title: 'Algorithm Art',
+                desc: 'Vepër e krijuar duke përdorur inteligjencë artificiale dhe algoritme për të gjeneruar art vizual unik dhe inovativ.',
+                artist: 'Harold Cohen',
+                year: '2022',
+                medium: 'AI-generated art'
+            },
+            'virtual_reality.jpg': {
+                title: 'Virtual Reality Art',
+                desc: 'Eksperiencë arti në realitet virtual që transformon hapësirën dhe kohën në një medium artistik.',
+                artist: 'Marina Abramović',
+                year: '2023',
+                medium: 'VR experience'
+            },
+            'digital_sculpture.jpg': {
+                title: 'Digital Sculpture',
+                desc: 'Skulpturë e krijuar duke përdorur teknologji 3D dhe printim 3D për të eksploruar kufijtë e artit fizik dhe digital.',
+                artist: 'Refik Anadol',
+                year: '2022',
+                medium: '3D printing'
+            },
+            'motion_graphics.jpg': {
+                title: 'Motion Graphics',
+                desc: 'Vepër që kombinon elemente vizuale me lëvizje për të krijuar një eksperiencë vizuale dinamike dhe tërheqëse.',
+                artist: 'GMUNK',
+                year: '2023',
+                medium: 'Motion design'
+            },
+            'neural_network_art.jpg': {
+                title: 'Neural Network Art',
+                desc: 'Vepër e krijuar duke përdorur rrjete nervore artificiale për të gjeneruar imazhe unike që sfidojnë perceptimin njerëzor dhe kufijtë e artit tradicional.',
+                artist: 'Mario Klingemann',
+                year: '2023',
+                medium: 'AI-generated art'
+            },
+            'augmented_reality.jpg': {
+                title: 'Augmented Reality Art',
+                desc: 'Instalim që përdor teknologjinë e realitetit të shtuar për të transformuar hapësirat fizike në eksperience artistike interaktive.',
+                artist: 'Olafur Eliasson',
+                year: '2023',
+                medium: 'AR installation'
+            }
+        };
+
+        // Gallery item click handler
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const src = img.src.split('/').pop();
+                const data = artworkData[src];
+
+                if (data) {
+                    lightboxImg.src = img.src;
+                    lightboxTitle.textContent = data.title;
+                    lightboxDesc.textContent = data.desc;
+                    lightboxArtist.textContent = data.artist;
+                    lightboxYear.textContent = data.year;
+                    lightboxMedium.textContent = data.medium;
+
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Close button handler
+        closeBtn.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            if (isZoomed) {
+                lightboxImg.style.transform = 'scale(1)';
+                isZoomed = false;
+            }
+        });
+
+        // Lightbox click handler
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+                if (isZoomed) {
+                    lightboxImg.style.transform = 'scale(1)';
+                    isZoomed = false;
+                }
+            }
+        });
+
+        // Zoom button handler
+        zoomBtn.addEventListener('click', () => {
+            isZoomed = !isZoomed;
+            lightboxImg.style.transform = isZoomed ? 'scale(1.5)' : 'scale(1)';
+            lightboxImg.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
+        });
+
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Slider functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const dotsContainer = document.querySelector('.slider-dots');
+
+        let currentSlide = 0;
+        const slideCount = slides.length;
+
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Auto slide
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // Pause auto slide on hover
+        slider.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            slideInterval = setInterval(nextSlide, 5000);
+        });
+    </script>
+</body>
+</html> 

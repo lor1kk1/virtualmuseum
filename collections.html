@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections - Virtual Museum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        .hero-section {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('bckg 4.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .filter-section {
+            padding: 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+        }
+
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-button {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem;
+            min-width: 200px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #d4af37;
+        }
+
+        .collections-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .collection-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .collection-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .collection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .collection-card:hover .collection-overlay {
+            opacity: 1;
+        }
+
+        .collection-info {
+            color: #fff;
+        }
+
+        .collection-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .collection-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .collection-content {
+            padding: 1.5rem;
+        }
+
+        .collection-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .collection-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .collection-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 500;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .view-button:hover {
+            background-color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: #1a1a1a;
+            padding: 2rem 1rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-section {
+            padding: 0.5rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #afafaf;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form textarea {
+            min-height: 80px;
+        }
+
+        .contact-form button {
+            padding: 0.5rem 1rem;
+            background: #d4af37;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .collections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-section {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Koleksionet tona</h1>
+            <p>Eksploroni gamën tonë të larmishme të koleksioneve të artit që përfshijnë periudha, stile dhe kultura të ndryshme</p>
+        </div>
+    </section>
+
+    <section class="filter-section">
+        <div class="filter-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search collections...">
+            </div>
+            <div class="filter-dropdown">
+                <button class="filter-button" data-filter="period">
+                    <i class="fas fa-filter"></i>
+                    Filtro nga periudha
+                </button>
+                <div class="dropdown-menu" id="period-dropdown">
+                    <div class="dropdown-item" data-period="all">Te gjitha</div>
+                    <div class="dropdown-item" data-period="ancient">Antike</div>
+                    <div class="dropdown-item" data-period="renaissance">Rinesanca (Shekulli 15-16)</div>
+                    <div class="dropdown-item" data-period="baroque">Barok (Shekulli 17-18)</div>
+                    <div class="dropdown-item" data-period="impressionism">Impresionizmi (Shekulli 19)</div>
+                    <div class="dropdown-item" data-period="modern">Modern (Shekulli 19-20)</div>
+                    <div class="dropdown-item" data-period="contemporary">Bashkëkohore (Shekulli 21)</div>
+                </div>
+            </div>
+            <div class="filter-dropdown">
+                <button class="filter-button" data-filter="style">
+                    <i class="fas fa-palette"></i>
+                    Filtro nga stili
+                </button>
+                <div class="dropdown-menu" id="style-dropdown">
+                    <div class="dropdown-item" data-style="all">Te gjitha</div>
+                    <div class="dropdown-item" data-style="realism">Realizmi</div>
+                    <div class="dropdown-item" data-style="impressionism">Impresionizmi</div>
+                    <div class="dropdown-item" data-style="expressionism">Ekspresionizmi</div>
+                    <div class="dropdown-item" data-style="abstract">Abstrakt</div>
+                    <div class="dropdown-item" data-style="digital">Digjital</div>
+                    <div class="dropdown-item" data-style="traditional">Traditional</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="collections-grid">
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('renaissance.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Veprat e Rilindjes</h3>
+                        <p>Shekulli 15-16</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Veprat e Rilindjes</h3>
+                <p>Zbuloni veprat revolucionare të artistëve të Rilindjes që revolucionuan artin dhe shprehjen njerëzore.</p>
+                <div class="collection-stats">
+                    <span>150+ Vepra</span>
+                    <span>Shekulli 15-16</span>
+                </div>
+                <a href="renaissance.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('modern.jpeg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Koleksioni i Artit Modern</h3>
+                        <p>Shekulli 19-20</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Koleksioni i Artit Modern</h3>
+                <p>Përjetoni veprat e guximshme dhe inovative të artistëve modernë që sfiduan normat tradicionale artistike.</p>
+                <div class="collection-stats">
+                    <span>200+ Vepra</span>
+                    <span>Shekulli 19-20</span>
+                </div>
+                <a href="modern.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('contemporary.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Arti Bashkëkohor</h3>
+                        <p>Shekulli 21</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Arti Bashkëkohor</h3>
+                <p>Eksploroni veprat moderne të artistëve bashkëkohorë që shtyjnë kufijtë e shprehjes artistike.</p>
+                <div class="collection-stats">
+                    <span>100+ Vepra</span>
+                    <span>Shekulli 21</span>
+                </div>
+                <a href="contemporary.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('starrynight.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Koleksioni i Impresionizmit</h3>
+                        <p>Shekulli 19</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Koleksioni i Impresionizmit</h3>
+                <p>Zhytuni në veprat revolucionare të mjeshtrave impresionistë që kapën dritën dhe lëvizjen.</p>
+                <div class="collection-stats">
+                    <span>120+ Vepra</span>
+                    <span>Shekulli 19</span>
+                </div>
+                <a href="impressionist.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('baroque.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Veprat e Barokut</h3>
+                        <p>Shekulli 17-18</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Veprat e Barokut</h3>
+                <p>Përjetoni veprat dramatike dhe emocionuese të artistëve barok që transformuan artin evropian.</p>
+                <div class="collection-stats">
+                    <span>100+ Vepra</span>
+                    <span>Shekulli 17-18</span>
+                </div>
+                <a href="baroque.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('abstract.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Ekspresionizmi Abstrakt</h3>
+                        <p>Shekulli 19-20</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Ekspresionizmi Abstrakt</h3>
+                <p>Zbuloni veprat e fuqishme dhe emocionuese të artistëve ekspresionistë abstrakt që revolucionuan artin modern.</p>
+                <div class="collection-stats">
+                    <span>90+ Vepra</span>
+                    <span>Shekulli 19-20</span>
+                </div>
+                <a href="abstract.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('digital.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Koleksioni i Artit Digjital</h3>
+                        <p>Shekulli 21</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Koleksioni i Artit Digjital</h3>
+                <p>Eksploroni botën moderne të artit dixhital, nga NFT-të deri te instalimet interaktive.</p>
+                <div class="collection-stats">
+                    <span>150+ Vepra</span>
+                    <span>Shekulli 21</span>
+                </div>
+                <a href="digital.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <div class="collection-image" style="background-image: url('asian.jpg');">
+                <div class="collection-overlay">
+                    <div class="collection-info">
+                        <h3>Koleksioni i Artit Azisë</h3>
+                        <p>Antike deri te Modern</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-content">
+                <h3>Koleksioni i Artit të Azisë</h3>
+                <p>Udhëtoni nëpër traditat e pasura artistike të Azisë, nga kaligrafia e lashtë deri te veprat bashkëkohore.</p>
+                <div class="collection-stats">
+                    <span>200+ Vepra</span>
+                    <span>Antike deri te Modern</span>
+                </div>
+                <a href="asian.html" class="view-button">Shikoni Koleksionin </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Rreth Nesh</h3>
+                <p>Zbuloni botën e mbledhjeve të artit të botës së shumta përmes një shërbimi digital të njëjtësi.</p>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Quick links</h3>
+                <ul class="footer-links">
+                    <li><a href="web.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="collections.html">Collections</a></li>
+                    <li><a href="exhibitions.html">Exhibitions</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Contact Us</h3>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Virtual Museum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        const collectionCards = document.querySelectorAll('.collection-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            collectionCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter dropdown functionality
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        let activeFilter = null;
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.filter-dropdown')) {
+                dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+                activeFilter = null;
+            }
+        });
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const filterType = button.dataset.filter;
+                const dropdown = document.getElementById(`${filterType}-dropdown`);
+
+                if (activeFilter === filterType) {
+                    dropdown.classList.remove('active');
+                    activeFilter = null;
+                } else {
+                    dropdowns.forEach(d => d.classList.remove('active'));
+                    dropdown.classList.add('active');
+                    activeFilter = filterType;
+                }
+            });
+        });
+
+        // Filter functionality
+        const periodItems = document.querySelectorAll('#period-dropdown .dropdown-item');
+        const styleItems = document.querySelectorAll('#style-dropdown .dropdown-item');
+
+        periodItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const period = item.dataset.period;
+                filterCollections('period', period);
+                updateActiveFilter(item, periodItems);
+            });
+        });
+
+        styleItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const style = item.dataset.style;
+                filterCollections('style', style);
+                updateActiveFilter(item, styleItems);
+            });
+        });
+
+        function filterCollections(type, value) {
+            collectionCards.forEach(card => {
+                const cardPeriod = card.dataset.period || '';
+                const cardStyle = card.dataset.style || '';
+                
+                if (value === 'all') {
+                    card.style.display = 'block';
+                } else if (type === 'period' && cardPeriod.includes(value)) {
+                    card.style.display = 'block';
+                } else if (type === 'style' && cardStyle.includes(value)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updateActiveFilter(selectedItem, items) {
+            items.forEach(item => item.classList.remove('active'));
+            selectedItem.classList.add('active');
+        }
+
+        // Add data attributes to collection cards
+        document.querySelectorAll('.collection-card').forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const period = card.querySelector('.collection-stats span:last-child').textContent.toLowerCase();
+            
+            if (title.includes('renaissance')) {
+                card.dataset.period = 'renaissance';
+                card.dataset.style = 'realism';
+            } else if (title.includes('modern')) {
+                card.dataset.period = 'modern';
+                card.dataset.style = 'expressionism';
+            } else if (title.includes('contemporary')) {
+                card.dataset.period = 'contemporary';
+                card.dataset.style = 'digital';
+            } else if (title.includes('impressionist')) {
+                card.dataset.period = 'impressionism';
+                card.dataset.style = 'impressionism';
+            } else if (title.includes('baroque')) {
+                card.dataset.period = 'baroque';
+                card.dataset.style = 'realism';
+            } else if (title.includes('abstract')) {
+                card.dataset.period = 'modern';
+                card.dataset.style = 'abstract';
+            } else if (title.includes('digital')) {
+                card.dataset.period = 'contemporary';
+                card.dataset.style = 'digital';
+            } else if (title.includes('asian')) {
+                card.dataset.period = 'ancient';
+                card.dataset.style = 'traditional';
+            }
+        });
+    </script>
+</body>
+</html>
