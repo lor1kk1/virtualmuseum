@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstract Art - Virtual Museum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Codystar:wght@300;400&family=Syne:wght@400..800&family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #fff;
+        }
+
+        /* Header Styles */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: 600px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .slide-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #c9a66b;
+            transform: scale(1.2);
+        }
+
+        /* Gallery Styles */
+        .gallery-section {
+            padding: 6rem 2rem;
+            background: #fff;
+        }
+
+        /* Add simple divider styles */
+        .section-divider {
+            height: 60px;
+            background: linear-gradient(45deg, #f8f9fa, #fff);
+            position: relative;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .divider-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #1a1a1a;
+            z-index: 2;
+        }
+
+        .divider-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: #d4af37;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+        }
+
+        .gallery-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .gallery-controls {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gallery-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #c9a66b;
+            background: transparent;
+            color: #1a1a1a;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #c9a66b, #8b6b3d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.1s;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item:hover .gallery-overlay h3 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-overlay p {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .gallery-overlay p {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .artwork-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.3s;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover .artwork-meta {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        .gallery-zoom {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-zoom {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-zoom i {
+            color: #1a1a1a;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .gallery-header h2 {
+                font-size: 2rem;
+            }
+
+            .gallery-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .gallery-filters {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #d4af37;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 26, 26, 0.95);
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .artists-section {
+            padding: 4rem 2rem;
+            background-color: #fff;
+        }
+
+        .artists-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .artist-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .artist-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 1.5rem;
+        }
+
+        .artist-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .artist-info button {
+            background-color: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .artist-info button:hover {
+            background-color: #333;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #1a1a1a;
+            padding: 2rem 1rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-section {
+            padding: 0.5rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #afafaf;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links li {
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 0.2rem 0;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+            transform: translateX(5px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form textarea {
+            min-height: 80px;
+        }
+
+        .contact-form button {
+            padding: 0.5rem 1rem;
+            background: #d4af37;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-section {
+                padding: 0;
+            }
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 2rem auto;
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .lightbox-img {
+            max-width: 60%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-details {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            color: white;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .lightbox-details h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .lightbox-details .artist {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .lightbox-details .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            white-space: pre-line;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            font-size: 1rem;
+            opacity: 0.8;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lightbox-meta i {
+            color: #d4af37;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .lightbox-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .lightbox-img {
+                max-width: 100%;
+                max-height: 50vh;
+            }
+
+            .lightbox-details {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Virtual Museum</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="collections.html">Collections</a>
+                <a href="exhibitions.html">Exhibitions</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="abstract.jpg" alt="Abstract Art" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Arti Abstrakt</h1>
+            <p>Explore the non-representational and emotional expressions of modern art, where form, color, and composition create powerful visual experiences.</p>
+        </div>
+    </section>
+
+    <!-- Slider Section -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <img src="composition_8.jpg" alt="Composition VIII">
+                <div class="slide-content">
+                    <h2>Composition VIII</h2>
+                    <p>Kryevepra e Wassily Kandinsky nga viti 1923, që përfaqëson kulmin e shprehjes së tij abstrakte përmes formave gjeometrike dhe ngjyrave të gjalla.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="broadway_boogie.jpg" alt="Broadway Boogie Woogie">
+                <div class="slide-content">
+                    <h2>Broadway Boogie Woogie</h2>
+                    <p>Vepra ikonë e Piet Mondrian nga 1942-43, duke kapur ritmin dhe energjinë e qytetit të Nju Jorkut përmes rrjetit të tij të nënshkrimit të ngjyrave kryesore.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="black_square.jpg" alt="Black Square">
+                <div class="slide-content">
+                    <h2>Black Square</h2>
+                    <p>Vepra revolucionare e Kazimir Malevich nga viti 1915, duke shënuar një pikë kthese në artin modern me abstraksionin e tij të pastër gjeometrik.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <div class="gallery-header">
+            <h2>Veprat e Artit Abstrakt</h2>
+            <p>Eksploroni vepra arti revolucionare që u shkëputën nga përfaqësimi tradicional, ku forma, ngjyra dhe emocionet krijojnë përvoja të fuqishme vizuale që sfidojnë perceptimin tonë për artin.</p>
+        </div>
+
+        <div class="gallery-controls">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Te gjitha</button>
+                <button class="filter-btn" data-filter="geometric">Gjeometrik</button>
+                <button class="filter-btn" data-filter="expressionist">Ekspresionist</button>
+                <button class="filter-btn" data-filter="color-field">Fusha e Ngjyrave</button>
+                <button class="filter-btn" data-filter="minimalist">Minimaliste</button>
+                <button class="filter-btn" data-filter="suprematist">Suprematiste</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- Artwork 1 -->
+            <div class="gallery-item" data-category="geometric">
+                <img src="composition_8.jpg" alt="Composition VIII">
+                <div class="gallery-overlay">
+                    <h3>Composition VIII</h3>
+                    <p>Wassily Kandinsky</p>
+                    <div class="artwork-meta">
+                        <span>1923</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('composition_8.jpg', 'Composition VIII', 'Wassily Kandinsky', '1923', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 2 -->
+            <div class="gallery-item" data-category="geometric">
+                <img src="broadway_boogie.jpg" alt="Broadway Boogie Woogie">
+                <div class="gallery-overlay">
+                    <h3>Broadway Boogie Woogie</h3>
+                    <p>Piet Mondrian</p>
+                    <div class="artwork-meta">
+                        <span>1942-43</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('broadway_boogie.jpg', 'Broadway Boogie Woogie', 'Piet Mondrian', '1942-43', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 3 -->
+            <div class="gallery-item" data-category="suprematist">
+                <img src="black_square.jpg" alt="Black Square">
+                <div class="gallery-overlay">
+                    <h3>Black Square</h3>
+                    <p>Kazimir Malevich</p>
+                    <div class="artwork-meta">
+                        <span>1915</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('black_square.jpg', 'Black Square', 'Kazimir Malevich', '1915', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 4 -->
+            <div class="gallery-item" data-category="expressionist">
+                <img src="yellow_red_blue.jpg" alt="Yellow-Red-Blue">
+                <div class="gallery-overlay">
+                    <h3>Yellow-Red-Blue</h3>
+                    <p>Wassily Kandinsky</p>
+                    <div class="artwork-meta">
+                        <span>1925</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('yellow_red_blue.jpg', 'Yellow-Red-Blue', 'Wassily Kandinsky', '1925', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 5 -->
+            <div class="gallery-item" data-category="color-field">
+                <img src="orange_red_yellow.jpg" alt="Orange and Yellow">
+                <div class="gallery-overlay">
+                    <h3>Orange and Yellow</h3>
+                    <p>Mark Rothko</p>
+                    <div class="artwork-meta">
+                        <span>1956</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('orange_red_yellow.jpg', 'Orange and Yellow', 'Mark Rothko', '1956', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 6 -->
+            <div class="gallery-item" data-category="minimalist">
+                <img src="white_on_white.jpg" alt="White on White">
+                <div class="gallery-overlay">
+                    <h3>White on White</h3>
+                    <p>Kazimir Malevich</p>
+                    <div class="artwork-meta">
+                        <span>1918</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('white_on_white.jpg', 'White on White', 'Kazimir Malevich', '1918', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 7 -->
+            <div class="gallery-item" data-category="expressionist">
+                <img src="improvisation_28.jpg" alt="Improvisation 28">
+                <div class="gallery-overlay">
+                    <h3>Improvisation 28</h3>
+                    <p>Wassily Kandinsky</p>
+                    <div class="artwork-meta">
+                        <span>1912</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('improvisation_28.jpg', 'Improvisation 28', 'Wassily Kandinsky', '1912', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 8 -->
+            <div class="gallery-item" data-category="color-field">
+                <img src="no_14.jpg" alt="No. 14">
+                <div class="gallery-overlay">
+                    <h3>No. 14</h3>
+                    <p>Mark Rothko</p>
+                    <div class="artwork-meta">
+                        <span>1960</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('no_14.jpg', 'No. 14', 'Mark Rothko', '1960', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+
+            <!-- Artwork 9 -->
+            <div class="gallery-item" data-category="geometric">
+                <img src="composition_rby.jpg" alt="Composition with Red, Blue and Yellow">
+                <div class="gallery-overlay">
+                    <h3>Composition with Red, Blue and Yellow</h3>
+                    <p>Piet Mondrian</p>
+                    <div class="artwork-meta">
+                        <span>1930</span>
+                        <span>Oil on canvas</span>
+                    </div>
+                </div>
+                <div class="gallery-zoom" onclick="openLightbox('composition_rby.jpg', 'Composition with Red, Blue and Yellow', 'Piet Mondrian', '1930', 'Oil on canvas')">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Section Divider -->
+    <div class="section-divider">
+        <div class="divider-content">
+            <h2>Artistet e artit abstrakt</h2>
+            <div class="divider-line"></div>
+        </div>
+    </div>
+
+    <!-- Artists Section -->
+    <section class="artists-section">
+        <div class="artists-container">
+            <!-- Artist 1 -->
+            <div class="artist-card">
+                <img src="Wassily.jpg" alt="Wassily Kandinsky">
+                <div class="artist-info">
+                    <h3>Wassily Kandinsky</h3>
+                    <p>1866-1944</p>
+                    <p>Piktor dhe teoricien rus i artit, i kredituar me krijimin e veprave të para thjesht abstrakte. Një nga figurat kryesore të artit modern dhe abstraksionit.</p>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card">
+                <img src="peit.webp" alt="Piet Mondrian">
+                <div class="artist-info">
+                    <h3>Piet Mondrian</h3>
+                    <p>1872-1944</p>
+                    <p>Piktor holandez që filloi lëvizjen De Stijl dhe zhvilloi stilin e Neoplasticizmit. Njohur për pikturat e tij me forma gjeometrike dhe ngjyra themelore.</p>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card">
+                <img src="pollock.jpg" alt="Jackson Pollock">
+                <div class="artist-info">
+                    <h3>Jackson Pollock</h3>
+                    <p>1912-1956</p>
+                    <p>Piktor amerikan dhe figurë kryesore në lëvizjen e ekspresionizmit abstrakt, i njohur për teknikën e tij të pikturës me pika. Një nga artistët më ndikues të shekullit të 20-të.</p>
+                </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="artist-card">
+                <img src="rothko.jpg" alt="Mark Rothko">
+                <div class="artist-info">
+                    <h3>Mark Rothko</h3>
+                    <p>1903-1970</p>
+                    <p>Piktor amerikan me origjinë ruse-çifute, i njohur për pikturat e fushës së ngjyrës. Veprat e tij të shkallës së madhe krijojnë përvoja zhytëse përmes ngjyrës dhe formës.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Rreth Nesh</h3>
+                <p>Zbuloni botën e mbledhjeve të artit të botës së shumta përmes një shërbimi digital të njëjtësi.</p>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Quick links</h3>
+                <ul class="footer-links">
+                    <li><a href="web.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="collections.html">Collections</a></li>
+                    <li><a href="exhibitions.html">Exhibitions</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Contact Us</h3>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Virtual Museum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img class="lightbox-img" src="" alt="">
+            <div class="lightbox-details">
+                <h3></h3>
+                <p class="artist"></p>
+                <p class="description"></p>
+                <div class="lightbox-meta">
+                    <span><i class="fas fa-calendar"></i> <span class="lightbox-year"></span></span>
+                    <span><i class="fas fa-palette"></i> <span class="lightbox-medium"></span></span>
+                    <span><i class="fas fa-map-marker-alt"></i> <span class="lightbox-location"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="lightbox-nav">
+            <button class="lightbox-btn prev" onclick="prevLightbox()"><i class="fas fa-chevron-left"></i></button>
+            <button class="lightbox-btn next" onclick="nextLightbox()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+
+        // Slider functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const dots = document.querySelectorAll('.dot');
+        
+        let currentSlide = 0;
+        const slideCount = slides.length;
+        let slideInterval;
+        
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+        }
+        
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            prevSlide();
+            startAutoSlide();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            nextSlide();
+            startAutoSlide();
+        });
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = index;
+                updateSlider();
+                startAutoSlide();
+            });
+        });
+        
+        // Initialize slider
+        startAutoSlide();
+
+        // Artwork data for lightbox
+        const artworkData = {
+            'composition_8.jpg': {
+                desc: 'Composition VIII është një nga veprat më të rëndësishme të Kandinsky-t, duke përfaqësuar kalimin e tij në abstraksion të pastër gjeometrik. Piktura përmban një rregullim kompleks të formave gjeometrike, vijave dhe ngjyrave që krijojnë një ritëm vizual dinamik. Kompozita demonstron besimin e Kandinsky-t në fuqinë shpirtërore dhe emocionale të formave dhe ngjyrave abstrakte.'
+            },
+            'broadway_boogie.jpg': {
+                desc: 'Broadway Boogie Woogie është kryevepra përfundimtare e Mondrian-it, e frymëzuar nga ritmi dhe energjia e New York City. Piktura përmban një rrjet të katrorëve të verdhë, të kuq dhe blu që krijojnë një ndjesi lëvizjeje dhe ritmi muzikor. Vepra përfaqëson shprehjen përfundimtare të stilit të tij neoplastik, ku ai e reduktoi artin në elementet më themelore.'
+            },
+            'black_square.jpg': {
+                desc: 'Black Square është një vepër revolucionare që shënoi një pikë kthese në artin modern. Malevich e krijoi këtë pikturë si një refuzim i përfaqësimit tradicional, duke e deklaruar atë si "pikën zero të pikturës." Katrori i thjeshtë i zi në një sfond të bardhë përfaqëson abstraksionin përfundimtar dhe fillimin e një ere të re artistike.'
+            },
+            'yellow_red_blue.jpg': {
+                desc: 'Yellow-Red-Blue është një nga veprat më të famshme të Kandinsky-t, duke treguar qasjen e tij unike ndaj ngjyrës dhe formës. Piktura kombinon forma gjeometrike dhe organike me një paletë ngjyrash të gjalla, duke krijuar një kompozim dinamik që shpreh emocionet e brendshme dhe besimet shpirtërore të artistit.'
+            },
+            'orange_red_yellow.jpg': {
+                desc: "Orange and Yellow është një shembull klasik i pikturave të fushës së ngjyrës të Rothko-s. Vepra përmban drejtkëndësha të mëdhenj me buzë të buta ngjyrash që duken se lundrojnë dhe shkëlqejnë. Piktura krijon një përvojë zhytëse, duke ftuar shikuesit të meditojnë mbi cilësitë emocionale dhe shpirtërore të ngjyrës."
+            },
+            'improvisation_28.jpg': {
+                desc: 'Improvisation 28 është një nga veprat më të rëndësishme të Kandinsky-t nga periudha e tij abstrakte. Piktura përmban forma organike dhe gjeometrike që lëvizin në një hapësirë të papërcaktuar, duke krijuar një ndjesi lëvizjeje dhe ritmi. Kandinsky përdori ngjyra të gjalla dhe forma të lira për të shprehur emocione dhe ndjesi muzikore.'
+            },
+            'no_14.jpg': {
+                desc: 'No. 14 është një nga veprat më të njohura të Rothko-s nga periudha e tij e vonë. Piktura përmban dy fusha të mëdha ngjyrash që ndryshojnë gradualisht, duke krijuar një ndjesi thellësie dhe hapësire. Rothko përdori ngjyra të errëta dhe të thella për të shprehur një ndjesi të thellësisë dhe misterit.'
+            },
+            'composition_rby.jpg': {
+                desc: 'Composition with Red, Blue and Yellow është një nga veprat më të njohura të Mondrian-it, duke përfaqësuar stilin e tij të neoplastizmit. Piktura përmban një rrjet të thjeshtë vijash horizontale dhe vertikale që krijojnë forma gjeometrike, me ngjyrat themelore të kuqe, blu dhe të verdhë. Vepra është një shembull i përsosur i qasjes së Mondrian-it për të reduktuar artin në elementet më themelore.'
+            },
+            'white_on_white.jpg': {
+                desc: 'White on White është një nga veprat më të rëndësishme të Malevich-it, duke shënuar një pikë kthese në zhvillimin e artit abstrakt. Piktura përmban një katror të bardhë në një sfond pak më të ndritshëm, duke krijuar një ndjesi subtile thellësie dhe hapësire. Vepra është një shembull i përsosur i Suprematizmit, duke reduktuar artin në formën më të thjeshtë të mundshme.'
+            }
+        };
+
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.querySelector('.lightbox-details h3');
+        const lightboxArtist = document.querySelector('.lightbox-details .artist');
+        const lightboxYear = document.querySelector('.lightbox-year');
+        const lightboxMedium = document.querySelector('.lightbox-medium');
+        const lightboxLocation = document.querySelector('.lightbox-location');
+        const lightboxDescription = document.querySelector('.lightbox-details .description');
+        let currentLightboxIndex = 0;
+
+        // Lightbox functionality
+        function openLightbox(imgSrc, title, artist, year, medium, location = 'Various Locations') {
+            lightboxImg.src = imgSrc;
+            lightboxTitle.textContent = title;
+            lightboxArtist.textContent = artist;
+            lightboxYear.textContent = year;
+            lightboxMedium.textContent = medium;
+            lightboxLocation.textContent = location;
+            lightboxDescription.textContent = artworkData[imgSrc.split('/').pop()].desc || 'A masterpiece of abstract art, showcasing the period\'s focus on form, color, and composition.';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function prevLightbox() {
+            // Implement previous artwork navigation
+        }
+
+        function nextLightbox() {
+            // Implement next artwork navigation
+        }
+
+        // Close lightbox when clicking outside
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft') {
+                    prevLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    nextLightbox();
+                }
+            }
+        });
+
+        // Update gallery items to use the new lightbox
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const src = img.src;
+                const title = item.querySelector('h3').textContent;
+                const artist = item.querySelector('p').textContent;
+                const year = item.querySelector('.artwork-meta span:first-child').textContent;
+                const medium = item.querySelector('.artwork-meta span:last-child').textContent;
+                
+                openLightbox(src, title, artist, year, medium);
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

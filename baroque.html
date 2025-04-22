@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baroque Collection - Virtual Museum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        .hero-section {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('bckg 2.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .slider-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider {
+            display: flex;
+            height: 500px;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+        }
+
+        .slide-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #fff;
+        }
+
+        .gallery-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .artwork-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .artwork-card:hover .artwork-image {
+            transform: scale(1.1);
+        }
+
+        .artwork-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .artwork-card:hover .artwork-info {
+            transform: translateY(0);
+        }
+
+        .artwork-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .artwork-card:hover .artwork-info h3 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .artwork-info p {
+            color: #fff;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.2s;
+        }
+
+        .artwork-card:hover .artwork-info p {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .artwork-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #d4af37;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.3s;
+        }
+
+        .artwork-card:hover .artwork-meta {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .lightbox-img-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-info {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+        }
+
+        .lightbox-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .lightbox-info p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: #d4af37;
+            font-weight: 500;
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lightbox-meta i {
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        .zoom-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .gallery-controls {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gallery-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #d4af37;
+            color: #fff;
+        }
+
+        .filter-btn.active {
+            font-weight: 600;
+        }
+
+        footer {
+            background: #1a1a1a;
+            padding: 2rem 1rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-section {
+            padding: 0.5rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #afafaf;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links li {
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 0.2rem 0;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+            transform: translateX(5px);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form textarea {
+            min-height: 80px;
+        }
+
+        .contact-form button {
+            padding: 0.5rem 1rem;
+            background: #d4af37;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #c9a66b;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-section {
+                padding: 0;
+            }
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #d4af37;
+        }
+
+        .gallery-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .zoom-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .artwork-card:hover .zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Artists Section Styles */
+        .artists-section {
+            padding: 4rem 2rem;
+            background-color: #fff;
+        }
+
+        .artists-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .artist-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .artist-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 1.5rem;
+        }
+
+        .artist-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: #d4af37;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="web.html" class="nav-logo">Muzeu Virtual</a>
+            <div class="nav-links">
+                <a href="web.html">Home</a>
+                <a href="about.html">Rreth Nesh</a>
+                <a href="collections.html">Koleksionet</a>
+                <a href="exhibitions.html">Fakte</a>
+                <a href="contact.html">Na kontaktoni</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Koleksioni Barok</h1>
+            <p>Përjetoni veprat dramatike dhe emocionuese të artistëve barok që transformuan artin evropian</p>
+        </div>
+    </section>
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <img src="night_watch.jpg" alt="The Night Watch by Rembrandt">
+                <div class="slide-content">
+                    <h3>The Night Watch</h3>
+                    <p>Rembrandt van Rijn, 1642</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="ecstasy_teresa.jpg" alt="The Ecstasy of Saint Teresa by Bernini">
+                <div class="slide-content">
+                    <h3>The Ecstasy of Saint Teresa</h3>
+                    <p>Gian Lorenzo Bernini, 1647-1652</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="judith_beheading.jpg" alt="Judith Beheading Holofernes by Caravaggio">
+                <div class="slide-content">
+                    <h3>Judith Beheading Holofernes</h3>
+                    <p>Caravaggio, 1598-1599</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="girl_pearl.jpg" alt="Girl with a Pearl Earring by Vermeer">
+                <div class="slide-content">
+                    <h3>Girl with a Pearl Earring</h3>
+                    <p>Johannes Vermeer, 1665</p>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots"></div>
+    </div>
+
+    <div class="gallery-section">
+        <div class="gallery-header">
+            <h2>Veprat e Artit Barok</h2>
+            <p>Eksploroni veprat dramatike dhe emocionale të periudhës barok, të karakterizuara nga madhështia, lëvizja dhe ndriçimi intensiv.</p>
+        </div>
+
+        <div class="gallery-controls">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Te gjitha</button>
+                <button class="filter-btn" data-filter="early">Baroku i hershëm</button>
+                <button class="filter-btn" data-filter="high">Baroku i madh</button>
+                <button class="filter-btn" data-filter="late">Baroku i vjetër</button>
+                <button class="filter-btn" data-filter="painting">Piktura</button>
+                <button class="filter-btn" data-filter="sculpture">Skulptura</button>
+                <button class="filter-btn" data-filter="architecture">Arkitekturë</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="gallery-section">
+        <div class="gallery-grid">
+            <div class="artwork-card" data-period="high" data-style="painting">
+                <img src="apollo_daphne.jpg" alt="Apollo and Daphne" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Apollo and Daphne</h3>
+                    <p>Gian Lorenzo Bernini</p>
+                    <div class="artwork-meta">
+                        <span>1622-1625</span>
+                        <span>Marble</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="early" data-style="painting">
+                <img src="calling_matthew.jpg" alt="The Calling of Saint Matthew" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Calling of Saint Matthew</h3>
+                    <p>Caravaggio</p>
+                    <div class="artwork-meta">
+                        <span>1599-1600</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="painting">
+                <img src="anatomy_lesson.jpg" alt="The Anatomy Lesson of Dr. Nicolaes Tulp" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Anatomy Lesson of Dr. Nicolaes Tulp</h3>
+                    <p>Rembrandt van Rijn</p>
+                    <div class="artwork-meta">
+                        <span>1632</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="night_watch.jpg" alt="The Night Watch" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Night Watch</h3>
+                    <p>Rembrandt van Rijn</p>
+                    <div class="artwork-meta">
+                        <span>1642</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="ecstasy_teresa.jpg" alt="The Ecstasy of Saint Teresa" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Ecstasy of Saint Teresa</h3>
+                    <p>Gian Lorenzo Bernini</p>
+                    <div class="artwork-meta">
+                        <span>1647-1652</span>
+                        <span>Marble</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="judith_beheading.jpg" alt="Judith Beheading Holofernes" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Judith Beheading Holofernes</h3>
+                    <p>Caravaggio</p>
+                    <div class="artwork-meta">
+                        <span>1598-1599</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="girl_pearl.jpg" alt="Girl with a Pearl Earring" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Girl with a Pearl Earring</h3>
+                    <p>Johannes Vermeer</p>
+                    <div class="artwork-meta">
+                        <span>1665</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="las_meninas.jpg" alt="Las Meninas" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Las Meninas</h3>
+                    <p>Diego Velázquez</p>
+                    <div class="artwork-meta">
+                        <span>1656</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card">
+                <img src="david_bernini.jpg" alt="David by Bernini" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>David</h3>
+                    <p>Gian Lorenzo Bernini</p>
+                    <div class="artwork-meta">
+                        <span>1623-1624</span>
+                        <span>Marble</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="painting">
+                <img src="return_prodigal.jpg" alt="The Return of the Prodigal Son" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Return of the Prodigal Son</h3>
+                    <p>Rembrandt van Rijn</p>
+                    <div class="artwork-meta">
+                        <span>1668</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="early" data-style="painting">
+                <img src="supper_emmaus.jpg" alt="Supper at Emmaus" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Supper at Emmaus</h3>
+                    <p>Caravaggio</p>
+                    <div class="artwork-meta">
+                        <span>1601</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="painting">
+                <img src="artemisia.jpg" alt="Artemisia Gentileschi" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Judith Slaying Holofernes</h3>
+                    <p>Artemisia Gentileschi</p>
+                    <div class="artwork-meta">
+                        <span>1614-1620</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="late" data-style="painting">
+                <img src="view_delft.jpg" alt="View of Delft" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>View of Delft</h3>
+                    <p>Johannes Vermeer</p>
+                    <div class="artwork-meta">
+                        <span>1660-1661</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="sculpture">
+                <img src="pluto_proserpina.jpg" alt="Pluto and Proserpina" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Pluto and Proserpina</h3>
+                    <p>Gian Lorenzo Bernini</p>
+                    <div class="artwork-meta">
+                        <span>1621-1622</span>
+                        <span>Marble</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="painting">
+                <img src="elevation_cross.jpg" alt="The Elevation of the Cross" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>The Elevation of the Cross</h3>
+                    <p>Peter Paul Rubens</p>
+                    <div class="artwork-meta">
+                        <span>1610-1611</span>
+                        <span>Oil on Canvas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="architecture">
+                <img src="st_peters.jpg" alt="St. Peter's Basilica" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>St. Peter's Basilica</h3>
+                    <p>Gian Lorenzo Bernini</p>
+                    <div class="artwork-meta">
+                        <span>1626-1667</span>
+                        <span>Architecture</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="architecture">
+                <img src="san_carlo.jpg" alt="San Carlo alle Quattro Fontane" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>San Carlo alle Quattro Fontane</h3>
+                    <p>Francesco Borromini</p>
+                    <div class="artwork-meta">
+                        <span>1638-1646</span>
+                        <span>Architecture</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="architecture">
+                <img src="versailles.jpg" alt="Palace of Versailles" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Palace of Versailles</h3>
+                    <p>Louis Le Vau & Jules Hardouin-Mansart</p>
+                    <div class="artwork-meta">
+                        <span>1661-1710</span>
+                    </div>
+                </div>
+            </div>
+            <div class="artwork-card" data-period="high" data-style="architecture">
+                <img src="san_ivo.jpg" alt="Sant'Ivo alla Sapienza" class="artwork-image">
+                <div class="zoom-icon">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+                <div class="artwork-info">
+                    <h3>Sant'Ivo alla Sapienza</h3>
+                    <p>Francesco Borromini</p>
+                    <div class="artwork-meta">
+                        <span>1642-1660</span>
+                        <span>Architecture</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn"><i class="fas fa-times"></i></span>
+            <div class="lightbox-img-container">
+                <img src="" alt="" class="lightbox-img">
+                <button class="zoom-btn"><i class="fas fa-search-plus"></i></button>
+            </div>
+            <div class="lightbox-info">
+                <h3></h3>
+                <p></p>
+                <div class="lightbox-meta">
+                    <span><i class="fas fa-palette"></i> <span class="artist"></span></span>
+                    <span><i class="fas fa-calendar"></i> <span class="year"></span></span>
+                    <span><i class="fas fa-paint-brush"></i> <span class="medium"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Artists Section -->
+    <section class="artists-section">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <h2>Artistët e Barokut</h2>
+            <div class="divider-line"></div>
+        </div>
+        <div class="artists-container">
+            <!-- Artist 1 -->
+            <div class="artist-card">
+                <img src="caravaggio.jpg" alt="Caravaggio">
+                <div class="artist-info">
+                    <h3>Caravaggio</h3>
+                    <p>1571-1610</p>
+                    <p>Piktor italian i njohur për përdorimin dramatik të dritës dhe hijes (chiaroscuro). Veprat e tij revolucionarizuan artin barok me realizmin e tyre të fuqishëm dhe emocionues.</p>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card">
+                <img src="rembrandt.jpg" alt="Rembrandt">
+                <div class="artist-info">
+                    <h3>Rembrandt</h3>
+                    <p>1606-1669</p>
+                    <p>Piktor dhe grafist holandez, mjeshtër i përdorimit të dritës dhe hijes. I njohur për autoportretet e tij dhe skenat biblike, konsiderohet një nga artistët më të mëdhenj të artit barok.</p>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card">
+                <img src="bernini.jpg" alt="Gian Lorenzo Bernini">
+                <div class="artist-info">
+                    <h3>Gian Lorenzo Bernini</h3>
+                    <p>1598-1680</p>
+                    <p>Skulptor, arkitekt dhe piktor italian. Figura kryesore e artit barok, i njohur për skulpturat e tij dramatike dhe kontributin në arkitekturën e Romës, veçanërisht në Bazilikën e Shën Pjetrit.</p>
+                </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="artist-card">
+                <img src="velazquez.jpg" alt="Diego Velázquez">
+                <div class="artist-info">
+                    <h3>Diego Velázquez</h3>
+                    <p>1599-1660</p>
+                    <p>Piktor spanjoll i njohur për portrete mbretërore dhe skena historike. Stili i tij realist dhe teknika e lirshme e penelit ndikuan thellësisht në zhvillimin e artit evropian.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Rreth Nesh</h3>
+                <p>Zbuloni botën e mbledhjeve të artit të botës së shumta përmes një shërbimi digital të njëjtësi.</p>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Quick links</h3>
+                <ul class="footer-links">
+                    <li><a href="web.html">Home</a></li>
+                    <li><a href="about.html">Rreth Nesh</a></li>
+                    <li><a href="collections.html">Koleksionet</a></li>
+                    <li><a href="exhibitions.html">Fakte</a></li>
+                    <li><a href="contact.html">Na kontaktoni</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 style="color: #d4af37;">Na kontaktoni</h3>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Dergo Mesazhin</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Muzeu Virtual. Të gjitha të drejtat e rezervuara.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Slider functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const dotsContainer = document.querySelector('.slider-dots');
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function goToSlide(index) {
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            currentSlide = index;
+            updateDots();
+            resetInterval();
+        }
+
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            goToSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            goToSlide(currentSlide);
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetInterval();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
+        });
+
+        startInterval();
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.artwork-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const filterValue = button.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filterValue === 'all') {
+                        item.style.display = 'block';
+                    } else {
+                        const itemPeriod = item.getAttribute('data-period');
+                        const itemStyle = item.getAttribute('data-style');
+                        
+                        if (filterValue === itemPeriod || filterValue === itemStyle) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.querySelector('.lightbox-info h3');
+        const lightboxDesc = document.querySelector('.lightbox-info p');
+        const lightboxArtist = document.querySelector('.lightbox-meta .artist');
+        const lightboxYear = document.querySelector('.lightbox-meta .year');
+        const lightboxMedium = document.querySelector('.lightbox-meta .medium');
+        const closeBtn = document.querySelector('.close-btn');
+        const zoomBtn = document.querySelector('.zoom-btn');
+
+        const artworkData = {
+            'night_watch.jpg': {
+                title: 'The Night Watch',
+                desc: 'Një nga veprat më të njohura të Rembrandt, The Night Watch përshkruan një grup të milicisë së Amsterdamit. Vepra është e njohur për përdorimin e dritës dhe hijes, si dhe për kompozimin e saj dinamik.',
+                artist: 'Rembrandt van Rijn',
+                year: '1642',
+                medium: 'Oil on Canvas'
+            },
+            'ecstasy_teresa.jpg': {
+                title: 'The Ecstasy of Saint Teresa',
+                desc: 'Një skulpturë e mrekullueshme nga Bernini që përshkruan ekstazin mistik të Shën Terezës. Vepra është e njohur për përdorimin e saj të përsosur të dritës dhe teksturës në mermer.',
+                artist: 'Gian Lorenzo Bernini',
+                year: '1647-1652',
+                medium: 'Marble'
+            },
+            'judith_beheading.jpg': {
+                title: 'Judith Beheading Holofernes',
+                desc: 'Një vepër e fuqishme nga Caravaggio që përshkruan momentin dramatik kur Juditha pret kokën e Holofernes. Vepra është e njohur për përdorimin e saj të dritës dhe realitetit të ashpër.',
+                artist: 'Caravaggio',
+                year: '1598-1599',
+                medium: 'Oil on Canvas'
+            },
+            'girl_pearl.jpg': {
+                title: 'Girl with a Pearl Earring',
+                desc: 'Një nga veprat më të njohura të Vermeer, kjo portret misterioz është shpesh quajtur "Mona Lisa e Veriut". Vepra është e njohur për përdorimin e saj të dritës dhe shprehjen e enigmatike të vajzës.',
+                artist: 'Johannes Vermeer',
+                year: '1665',
+                medium: 'Oil on Canvas'
+            },
+            'las_meninas.jpg': {
+                title: 'Las Meninas',
+                desc: 'Një vepër komplekse dhe enigmatike nga Velázquez që përshkruan familjen mbretërore spanjolle. Vepra është e njohur për përdorimin e saj të perspektivës dhe reflektimeve.',
+                artist: 'Diego Velázquez',
+                year: '1656',
+                medium: 'Oil on Canvas'
+            },
+            'david_bernini.jpg': {
+                title: 'David',
+                desc: 'Një skulpturë e mrekullueshme nga Bernini që përshkruan Davidin në momentin para luftës me Goliathin. Vepra është e njohur për energjinë dhe lëvizjen e saj dinamike.',
+                artist: 'Gian Lorenzo Bernini',
+                year: '1623-1624',
+                medium: 'Marble'
+            },
+            'apollo_daphne.jpg': {
+                title: 'Apollo and Daphne',
+                desc: 'Një skulpturë e mrekullueshme nga Bernini që përshkruan momentin kur Apollo përpiqet të kapë Daphnen, e cila po shndërrohet në një dafinë. Vepra është e njohur për detajet e saj të hollësishme dhe për shprehjen e lëvizjes.',
+                artist: 'Gian Lorenzo Bernini',
+                year: '1622-1625',
+                medium: 'Marble'
+            },
+            'calling_matthew.jpg': {
+                title: 'The Calling of Saint Matthew',
+                desc: 'Një vepër e fuqishme nga Caravaggio që përshkruan momentin kur Jezusi thërret Mattheun të ndjekë atë. Vepra është e njohur për përdorimin e saj të dritës dhe realitetit të ashpër.',
+                artist: 'Caravaggio',
+                year: '1599-1600',
+                medium: 'Oil on Canvas'
+            },
+            'anatomy_lesson.jpg': {
+                title: 'The Anatomy Lesson of Dr. Nicolaes Tulp',
+                desc: 'Një vepër e rëndësishme nga Rembrandt që përshkruan një mësim të anatomisë. Vepra është e njohur për përdorimin e saj të dritës dhe për portretizimin e saktë të anatomisë njerëzore.',
+                artist: 'Rembrandt van Rijn',
+                year: '1632',
+                medium: 'Oil on Canvas'
+            },
+            'return_prodigal.jpg': {
+                title: 'The Return of the Prodigal Son',
+                desc: 'Një nga veprat më të fuqishme të Rembrandt, kjo përshkruan momentin emocionues të kthimit të birit të humbur. Vepra është e njohur për përdorimin e saj të dritës dhe për shprehjen e thellë të dashurisë dhe faljes.',
+                artist: 'Rembrandt van Rijn',
+                year: '1668',
+                medium: 'Oil on Canvas'
+            },
+            'supper_emmaus.jpg': {
+                title: 'Supper at Emmaus',
+                desc: 'Një vepër e mrekullueshme nga Caravaggio që përshkruan momentin kur dishepujt e Jezusit e njohin atë pas ringjalljes. Vepra është e njohur për përdorimin e saj të dritës dhe për realitetin e saj të ashpër.',
+                artist: 'Caravaggio',
+                year: '1601',
+                medium: 'Oil on Canvas'
+            },
+            'artemisia.jpg': {
+                title: 'Judith Slaying Holofernes',
+                desc: 'Një vepër e fuqishme nga Artemisia Gentileschi që përshkruan momentin dramatik kur Juditha pret kokën e Holofernes. Vepra është e njohur për përdorimin e saj të dritës dhe për shprehjen e saj të fuqishme të fuqisë femërore.',
+                artist: 'Artemisia Gentileschi',
+                year: '1614-1620',
+                medium: 'Oil on Canvas'
+            },
+            'view_delft.jpg': {
+                title: 'View of Delft',
+                desc: 'Një nga veprat më të njohura të Vermeer, kjo përshkruan qytetin e Delft në një ditë të qetë. Vepra është e njohur për përdorimin e saj të dritës dhe për detajet e saj të hollësishme.',
+                artist: 'Johannes Vermeer',
+                year: '1660-1661',
+                medium: 'Oil on Canvas'
+            },
+            'pluto_proserpina.jpg': {
+                title: 'Pluto and Proserpina',
+                desc: 'Një skulpturë e mrekullueshme nga Bernini që përshkruan momentin kur Pluto rrëmben Proserpinën. Vepra është e njohur për përdorimin e saj të dritës dhe për shprehjen e saj të lëvizjes.',
+                artist: 'Gian Lorenzo Bernini',
+                year: '1621-1622',
+                medium: 'Marble'
+            },
+            'elevation_cross.jpg': {
+                title: 'The Elevation of the Cross',
+                desc: 'Një vepër e fuqishme nga Rubens që përshkruan momentin kur kryqi është ngritur. Vepra është e njohur për përdorimin e saj të dritës dhe për kompozimin e saj dinamik.',
+                artist: 'Peter Paul Rubens',
+                year: '1610-1611',
+                medium: 'Oil on Canvas'
+            },
+            'st_peters.jpg': {
+                title: 'St. Peter\'s Basilica',
+                desc: 'Një nga ndërtesat më të mëdha dhe më të rëndësishme të Kishës Katolike, St. Peter\'s Basilica është një shembull i shkëlqyer i arkitekturës baroke. Bernini kontribuoi në dizajnin e përgjithshëm dhe në kolonadën e famshme të sheshit.',
+                artist: 'Gian Lorenzo Bernini',
+                year: '1626-1667',
+                medium: 'Architecture'
+            },
+            'san_carlo.jpg': {
+                title: 'San Carlo alle Quattro Fontane',
+                desc: 'Një nga veprat më të njohura të Borrominit, kjo kishë është e njohur për fasadën e saj të lakuar dhe për planin e saj kompleks. Është konsideruar një shembull i përsosur i arkitekturës baroke.',
+                artist: 'Francesco Borromini',
+                year: '1638-1646',
+                medium: 'Architecture'
+            },
+            'versailles.jpg': {
+                title: 'Palace of Versailles',
+                desc: 'Palati i Versailles është një nga shembujt më të mëdhenj të arkitekturës baroke dhe një simbol i pushtetit absolut të monarkisë franceze. Është i njohur për pasurinë e saj të dekorimeve dhe për kopshtet e saj të mëdhenj.',
+                artist: 'Louis Le Vau & Jules Hardouin-Mansart',
+                year: '1661-1710',
+                medium: 'Architecture'
+            },
+            'san_ivo.jpg': {
+                title: 'Sant\'Ivo alla Sapienza',
+                desc: 'Një vepër tjetër e mrekullueshme e Borrominit, kjo kishë është e njohur për kupolën e saj të veçantë dhe për planin e saj të ndërlikuar. Është konsideruar një nga arritjet më të mëdha të arkitekturës baroke.',
+                artist: 'Francesco Borromini',
+                year: '1642-1660',
+                medium: 'Architecture'
+            }
+        };
+
+        galleryItems.forEach(card => {
+            card.addEventListener('click', () => {
+                const img = card.querySelector('img');
+                const src = img.src.split('/').pop();
+                const data = artworkData[src];
+
+                lightboxImg.src = img.src;
+                lightboxTitle.textContent = data.title;
+                lightboxDesc.textContent = data.desc;
+                lightboxArtist.textContent = data.artist;
+                lightboxYear.textContent = data.year;
+                lightboxMedium.textContent = data.medium;
+
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        let isZoomed = false;
+        zoomBtn.addEventListener('click', () => {
+            isZoomed = !isZoomed;
+            lightboxImg.style.transform = isZoomed ? 'scale(1.5)' : 'scale(1)';
+            lightboxImg.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
+        });
+    </script>
+</body>
+</html> 
